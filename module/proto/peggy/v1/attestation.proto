@@ -68,9 +68,6 @@ message ERC20Token {
     // The amount of the ERC20 token 
     string amount                 = 1 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
 
-    // The symbol of the ERC20 token (note: this may not be trustworthy as token names can change)
-    string symbol                 = 2;
-
     // The contract address on ETH of the token (note: developers should look up the token symbol using the address on ETH to display for UI)
-    string token_contract_address = 3; 
+    string token_contract_address = 2; 
 }
