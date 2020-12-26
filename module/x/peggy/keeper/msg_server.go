@@ -235,13 +235,13 @@ func (k msgServer) DepositClaim(c context.Context, msg *types.MsgDepositClaim) (
 	val := k.StakingKeeper.Validator(ctx, validator)
 	switch {
 	case val == nil:
-		return nil, sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "validator not in acitve set")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "validator not in active set")
 	case !val.IsBonded():
-		return nil, sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "validator not in acitve set")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "validator not in active set")
 	}
 
 	// Add the claim to the store
-	att, err := k.AddClaim(ctx, msg.GetType(), msg.GetEventNonce(), validator, msg)
+	att, err := k.AddClaim(ctx, msg)
 	if err != nil {
 		return nil, sdkerrors.Wrap(err, "create attestation")
 	}
@@ -280,7 +280,7 @@ func (k msgServer) WithdrawClaim(c context.Context, msg *types.MsgWithdrawClaim)
 	}
 
 	// Add the claim to the store
-	att, err := k.AddClaim(ctx, msg.GetType(), msg.GetEventNonce(), validator, msg)
+	att, err := k.AddClaim(ctx, msg)
 	if err != nil {
 		return nil, sdkerrors.Wrap(err, "create attestation")
 	}

@@ -16,12 +16,12 @@ import (
 // - Checks if the attestation has enough votes to be considered "Observed", then attempts to apply it to the
 //   consensus state (e.g. minting tokens for a deposit event)
 // - If so, marks it "Observed" and emits an event
-func (k Keeper) AddClaim(ctx sdk.Context, claimType types.ClaimType, eventNonce uint64, validator sdk.ValAddress, details types.EthereumClaim) (*types.Attestation, error) {
-	if err := k.storeClaim(ctx, claimType, eventNonce, validator, details); err != nil {
+func (k Keeper) AddClaim(ctx sdk.Context, details types.EthereumClaim) (*types.Attestation, error) {
+	if err := k.storeClaim(ctx, details); err != nil {
 		return nil, sdkerrors.Wrap(err, "claim")
 	}
 
-	att := k.voteForAttestation(ctx, claimType, eventNonce, details, validator)
+	att := k.voteForAttestation(ctx, details)
 
 	k.tryAttestation(ctx, att, details)
 
@@ -31,22 +31,19 @@ func (k Keeper) AddClaim(ctx sdk.Context, claimType types.ClaimType, eventNonce 
 }
 
 // storeClaim persists a claim. Fails when a claim submitted by an Eth signer does not increment the event nonce by exactly 1.
-func (k Keeper) storeClaim(ctx sdk.Context, claimType types.ClaimType, eventNonce uint64, validator sdk.ValAddress, details types.EthereumClaim) error {
+func (k Keeper) storeClaim(ctx sdk.Context, details types.EthereumClaim) error {
 	// Check that the nonce of this event is exactly one higher than the last nonce stored by this validator.
 	// We check the event nonce in processAttestation as well, but checking it here gives individual eth signers a chance to retry.
-	lastEventNonce := k.GetLastEventNonceByValidator(ctx, validator)
-	if eventNonce != lastEventNonce+1 {
+	lastEventNonce := k.GetLastEventNonceByValidator(ctx, sdk.ValAddress(details.GetClaimer()))
+	if details.GetEventNonce() != lastEventNonce+1 {
 		return types.ErrNonContiguousEventNonce
 	}
-	k.setLastEventNonceByValidator(ctx, validator, eventNonce)
-
-	// Store this nonce and the claim
-	// TODO: This is not actually storing the claim. It can only be used to check if we have stored the same claim before.
-	// We need to think this through more. This will be used for slashing later.
+	k.setLastEventNonceByValidator(ctx, sdk.ValAddress(details.GetClaimer()), details.GetEventNonce())
+	// Store the claim
+	genericClaim, _ := types.GenericClaimfromInterface(details)
 	store := ctx.KVStore(k.storeKey)
-	cKey := types.GetClaimKey(claimType, eventNonce, validator, details)
-	// TODO: we need to store this claim here, need to change this index
-	store.Set(cKey, []byte{}) // empty as all payload is in the key already (no gas costs)
+	cKey := types.GetClaimKey(details)
+	store.Set(cKey, k.cdc.MustMarshalBinaryBare(genericClaim))
 	return nil
 }
 
@@ -54,24 +51,21 @@ func (k Keeper) storeClaim(ctx sdk.Context, claimType types.ClaimType, eventNonc
 // has submitted a claim for this exact event
 func (k Keeper) voteForAttestation(
 	ctx sdk.Context,
-	claimType types.ClaimType,
-	eventNonce uint64,
 	details types.EthereumClaim,
-	validator sdk.ValAddress,
 ) *types.Attestation {
 	// Tries to get an attestation with the same eventNonce and details as the claim that was submitted.
-	att := k.GetAttestation(ctx, eventNonce, details)
+	att := k.GetAttestation(ctx, details.GetEventNonce(), details)
 
 	// If it does not exist, create a new one.
 	if att == nil {
 		att = &types.Attestation{
-			EventNonce: uint64(eventNonce),
+			EventNonce: details.GetEventNonce(),
 			Observed:   false,
 		}
 	}
 
 	// Add the validator's vote to this attestation
-	att.Votes = append(att.Votes, validator.String())
+	att.Votes = append(att.Votes, details.GetClaimer().String())
 
 	return att
 }
@@ -214,7 +208,7 @@ func (k Keeper) setLastEventNonceByValidator(ctx sdk.Context, validator sdk.ValA
 }
 
 // HasClaim returns true if a claim exists
-func (k Keeper) HasClaim(ctx sdk.Context, claimType types.ClaimType, nonce uint64, validator sdk.ValAddress, details types.EthereumClaim) bool {
+func (k Keeper) HasClaim(ctx sdk.Context, details types.EthereumClaim) bool {
 	store := ctx.KVStore(k.storeKey)
-	return store.Has(types.GetClaimKey(claimType, nonce, validator, details))
+	return store.Has(types.GetClaimKey(details))
 }

@@ -95,19 +95,19 @@ func GetValsetConfirmKey(nonce uint64, validator sdk.AccAddress) []byte {
 // prefix type               cosmos-validator-address                       nonce                             attestation-details-hash
 // [0x0][0 0 0 1][cosmosvaloper1ahx7f8wyertuus9r20284ej0asrs085case3kn][0 0 0 0 0 0 0 1][fd1af8cec6c67fcf156f1b61fdf91ebc04d05484d007436e75342fc05bbff35a]
 // TODO: remove the validator address usage here!
-func GetClaimKey(claimType ClaimType, nonce uint64, validator sdk.ValAddress, details EthereumClaim) []byte {
+func GetClaimKey(details EthereumClaim) []byte {
 	var detailsHash []byte
 	if details != nil {
 		detailsHash = details.ClaimHash()
 	} else {
 		panic("No claim without details!")
 	}
-	claimTypeLen := len([]byte{byte(claimType)})
-	nonceBz := UInt64Bytes(nonce)
+	claimTypeLen := len([]byte{byte(details.GetType())})
+	nonceBz := UInt64Bytes(details.GetEventNonce())
 	key := make([]byte, len(OracleClaimKey)+claimTypeLen+sdk.AddrLen+len(nonceBz)+len(detailsHash))
 	copy(key[0:], OracleClaimKey)
-	copy(key[len(OracleClaimKey):], []byte{byte(claimType)})
-	copy(key[len(OracleClaimKey)+claimTypeLen:], validator)
+	copy(key[len(OracleClaimKey):], []byte{byte(details.GetType())})
+	copy(key[len(OracleClaimKey)+claimTypeLen:], details.GetClaimer())
 	copy(key[len(OracleClaimKey)+claimTypeLen+sdk.AddrLen:], nonceBz)
 	copy(key[len(OracleClaimKey)+claimTypeLen+sdk.AddrLen+len(nonceBz):], detailsHash)
 	return key
