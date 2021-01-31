@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"context"
 	"strconv"
 
 	"github.com/althea-net/peggy/module/x/peggy/types"
@@ -79,7 +78,7 @@ func CmdGetCurrentValset() *cobra.Command {
 
 			req := &types.QueryCurrentValsetRequest{}
 
-			res, err := queryClient.CurrentValset(context.Background(), req)
+			res, err := queryClient.CurrentValset(cmd.Context(), req)
 			if err != nil {
 				return err
 			}
@@ -107,7 +106,7 @@ func CmdGetValsetRequest() *cobra.Command {
 				Nonce: nonce,
 			}
 
-			res, err := queryClient.ValsetRequest(context.Background(), req)
+			res, err := queryClient.ValsetRequest(cmd.Context(), req)
 			if err != nil {
 				return err
 			}
@@ -136,7 +135,7 @@ func CmdGetValsetConfirm() *cobra.Command {
 				Address: args[1],
 			}
 
-			res, err := queryClient.ValsetConfirm(context.Background(), req)
+			res, err := queryClient.ValsetConfirm(cmd.Context(), req)
 			if err != nil {
 				return err
 			}
@@ -159,7 +158,7 @@ func CmdGetPendingValsetRequest() *cobra.Command {
 				Address: args[0],
 			}
 
-			res, err := queryClient.LastPendingValsetRequestByAddr(context.Background(), req)
+			res, err := queryClient.LastPendingValsetRequestByAddr(cmd.Context(), req)
 			if err != nil {
 				return err
 			}
@@ -182,7 +181,7 @@ func CmdGetPendingOutgoingTXBatchRequest() *cobra.Command {
 				Address: args[0],
 			}
 
-			res, err := queryClient.LastPendingBatchRequestByAddr(context.Background(), req)
+			res, err := queryClient.LastPendingBatchRequestByAddr(cmd.Context(), req)
 			if err != nil {
 				return err
 			}
