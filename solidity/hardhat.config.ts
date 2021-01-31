@@ -1,7 +1,16 @@
-import { usePlugin } from "@nomiclabs/buidler/config";
-usePlugin("@nomiclabs/buidler-waffle");
-usePlugin("buidler-gas-reporter");
-usePlugin("buidler-typechain");
+import "@nomiclabs/hardhat-waffle";
+import "hardhat-gas-reporter";
+import "hardhat-typechain";
+import { task } from "hardhat/config";
+
+
+task("accounts", "Prints the list of accounts", async (args, hre) => {
+  const accounts = await hre.ethers.getSigners();
+
+  for (const account of accounts) {
+    console.log(account.address);
+  }
+});
 
 // // This is a sample Buidler task. To learn how to create your own go to
 // // https://buidler.dev/guides/create-task.html
@@ -19,12 +28,15 @@ usePlugin("buidler-typechain");
 // Go to https://buidler.dev/config/ to learn more
 module.exports = {
   // This is a sample solc configuration that specifies which version of solc to use
-  solc: {
+  solidity: {
     version: "0.6.6",
-    optimizer: { enabled: true, runs: 200000 }
-  },
+    settings: {
+      optimizer: {
+        enabled: true
+      }
+    }  },
   networks: {
-    buidlerevm: {
+    hardhat: {
       accounts: [
         {
           privateKey:
@@ -811,6 +823,10 @@ module.exports = {
   },
   typechain: {
     outDir: "typechain",
-    target: "ethers"
+    target: "ethers-v5",
+    runOnCompile: true
+  },
+  gasReporter: {
+    enabled: true
   }
 };

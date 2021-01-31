@@ -2,7 +2,8 @@ pragma solidity ^0.6.6;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@nomiclabs/buidler/console.sol";
+import "hardhat/console.sol";
+import "./CosmosToken.sol";
 
 contract Peggy {
 	using SafeMath for uint256;
@@ -34,6 +35,15 @@ contract Peggy {
 		address indexed _sender,
 		bytes32 indexed _destination,
 		uint256 _amount,
+		uint256 _eventNonce
+	);
+	event ERC20DeployedEvent(
+		// FYI: Can't index on a string without doing a bunch of weird stuff
+		string _cosmosDenom,
+		address indexed _tokenContract,
+		string _name,
+		string _symbol,
+		uint8 _decimals,
 		uint256 _eventNonce
 	);
 	event ValsetUpdatedEvent(
@@ -87,9 +97,8 @@ contract Peggy {
 		bytes32 _r,
 		bytes32 _s
 	) private pure returns (bool) {
-		bytes32 messageDigest = keccak256(
-			abi.encodePacked("\x19Ethereum Signed Message:\n32", _theHash)
-		);
+		bytes32 messageDigest =
+			keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", _theHash));
 		return _signer == ecrecover(messageDigest, _v, _r, _s);
 	}
 
@@ -110,9 +119,8 @@ contract Peggy {
 		// bytes32 encoding of the string "checkpoint"
 		bytes32 methodName = 0x636865636b706f696e7400000000000000000000000000000000000000000000;
 
-		bytes32 checkpoint = keccak256(
-			abi.encode(_peggyId, methodName, _valsetNonce, _validators, _powers)
-		);
+		bytes32 checkpoint =
+			keccak256(abi.encode(_peggyId, methodName, _valsetNonce, _validators, _powers));
 
 		return checkpoint;
 	}
@@ -210,12 +218,8 @@ contract Peggy {
 		);
 
 		// Check that enough current validators have signed off on the new validator set
-		bytes32 newCheckpoint = makeCheckpoint(
-			_newValidators,
-			_newPowers,
-			_newValsetNonce,
-			state_peggyId
-		);
+		bytes32 newCheckpoint =
+			makeCheckpoint(_newValidators, _newPowers, _newValsetNonce, state_peggyId);
 
 		checkValidatorSignatures(
 			_currentValidators,
@@ -259,7 +263,10 @@ contract Peggy {
 		address[] memory _destinations,
 		uint256[] memory _fees,
 		uint256 _batchNonce,
-		address _tokenContract
+		address _tokenContract,
+		// a block height beyond which this batch is not valid
+		// used to provide a fee-free timeout
+		uint256 _batchTimeout
 	) public {
 		// CHECKS scoped to reduce stack depth
 		{
@@ -267,6 +274,12 @@ contract Peggy {
 			require(
 				state_lastBatchNonces[_tokenContract] < _batchNonce,
 				"New batch nonce must be greater than the current nonce"
+			);
+
+			// Check that the block height is less than the timeout height
+			require(
+				block.number < _batchTimeout,
+				"Batch timeout must be greater than the current block height"
 			);
 
 			// Check that current validators, powers, and signatures (v,r,s) set is well-formed
@@ -312,7 +325,8 @@ contract Peggy {
 						_destinations,
 						_fees,
 						_batchNonce,
-						_tokenContract
+						_tokenContract,
+						_batchTimeout
 					)
 				),
 				state_powerThreshold
@@ -355,6 +369,27 @@ contract Peggy {
 			msg.sender,
 			_destination,
 			_amount,
+			state_lastEventNonce
+		);
+	}
+
+	function deployERC20(
+		string memory _cosmosDenom,
+		string memory _name,
+		string memory _symbol,
+		uint8 _decimals
+	) public {
+		// Deploy an ERC20 with entire supply granted to Peggy.sol
+		CosmosERC20 erc20 = new CosmosERC20(address(this), _name, _symbol, _decimals);
+
+		// Fire an event to let the Cosmos module know
+		state_lastEventNonce = state_lastEventNonce.add(1);
+		emit ERC20DeployedEvent(
+			_cosmosDenom,
+			address(erc20),
+			_name,
+			_symbol,
+			_decimals,
 			state_lastEventNonce
 		);
 	}

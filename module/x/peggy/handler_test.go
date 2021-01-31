@@ -12,12 +12,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+//TODO-JT: need to update this stuff to stop using claims
 func TestHandleMsgSendToEth(t *testing.T) {
 	var (
 		userCosmosAddr, _            = sdk.AccAddressFromBech32("cosmos1990z7dqsvh8gthw9pa5sn4wuy2xrsd80mg5z6y")
 		blockTime                    = time.Date(2020, 9, 14, 15, 20, 10, 0, time.UTC)
 		blockHeight        int64     = 200
-		denom                        = "peggy/0xB5E9944950C97acab395a324716D186632789712"
+		denom                        = "peggy0xB5E9944950C97acab395a324716D186632789712"
 		startingCoinAmount sdk.Int   = sdk.NewIntFromUint64(150)
 		sendAmount         sdk.Int   = sdk.NewIntFromUint64(50)
 		feeAmount          sdk.Int   = sdk.NewIntFromUint64(5)
@@ -107,25 +108,25 @@ func TestHandleCreateEthereumClaimsSingleValidator(t *testing.T) {
 	// when
 	ctx = ctx.WithBlockTime(myBlockTime)
 	_, err := h(ctx, &ethClaim)
+	EndBlocker(ctx, input.PeggyKeeper)
 	require.NoError(t, err)
-	// and claim persisted
-	claimFound := input.PeggyKeeper.HasClaim(ctx, &ethClaim)
-	assert.True(t, claimFound)
+
 	// and attestation persisted
-	a := input.PeggyKeeper.GetAttestation(ctx, myNonce, &ethClaim)
+	a := input.PeggyKeeper.GetAttestation(ctx, myNonce, ethClaim.ClaimHash())
 	require.NotNil(t, a)
 	// and vouchers added to the account
 	balance := input.BankKeeper.GetAllBalances(ctx, myCosmosAddr)
-	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance)
+	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance)
 
 	// Test to reject duplicate deposit
 	// when
 	ctx = ctx.WithBlockTime(myBlockTime)
 	_, err = h(ctx, &ethClaim)
+	EndBlocker(ctx, input.PeggyKeeper)
 	// then
 	require.Error(t, err)
 	balance = input.BankKeeper.GetAllBalances(ctx, myCosmosAddr)
-	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance)
+	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance)
 
 	// Test to reject skipped nonce
 	ethClaim = types.MsgDepositClaim{
@@ -140,10 +141,11 @@ func TestHandleCreateEthereumClaimsSingleValidator(t *testing.T) {
 	// when
 	ctx = ctx.WithBlockTime(myBlockTime)
 	_, err = h(ctx, &ethClaim)
+	EndBlocker(ctx, input.PeggyKeeper)
 	// then
 	require.Error(t, err)
 	balance = input.BankKeeper.GetAllBalances(ctx, myCosmosAddr)
-	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance)
+	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance)
 
 	// Test to finally accept consecutive nonce
 	ethClaim = types.MsgDepositClaim{
@@ -158,10 +160,12 @@ func TestHandleCreateEthereumClaimsSingleValidator(t *testing.T) {
 	// when
 	ctx = ctx.WithBlockTime(myBlockTime)
 	_, err = h(ctx, &ethClaim)
+	EndBlocker(ctx, input.PeggyKeeper)
+
 	// then
 	require.NoError(t, err)
 	balance = input.BankKeeper.GetAllBalances(ctx, myCosmosAddr)
-	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 25)}, balance)
+	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 25)}, balance)
 }
 
 func TestHandleCreateEthereumClaimsMultiValidator(t *testing.T) {
@@ -219,46 +223,40 @@ func TestHandleCreateEthereumClaimsMultiValidator(t *testing.T) {
 	// when
 	ctx = ctx.WithBlockTime(myBlockTime)
 	_, err := h(ctx, &ethClaim1)
+	EndBlocker(ctx, input.PeggyKeeper)
 	require.NoError(t, err)
-	// and claim persisted
-	claimFound1 := input.PeggyKeeper.HasClaim(ctx, &ethClaim1)
-	assert.True(t, claimFound1)
 	// and attestation persisted
-	a1 := input.PeggyKeeper.GetAttestation(ctx, myNonce, &ethClaim1)
+	a1 := input.PeggyKeeper.GetAttestation(ctx, myNonce, ethClaim1.ClaimHash())
 	require.NotNil(t, a1)
 	// and vouchers not yet added to the account
 	balance1 := input.BankKeeper.GetAllBalances(ctx, myCosmosAddr)
-	assert.NotEqual(t, sdk.Coins{sdk.NewInt64Coin("peggy/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance1)
+	assert.NotEqual(t, sdk.Coins{sdk.NewInt64Coin("peggy0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance1)
 
 	// when
 	ctx = ctx.WithBlockTime(myBlockTime)
 	_, err = h(ctx, &ethClaim2)
+	EndBlocker(ctx, input.PeggyKeeper)
 	require.NoError(t, err)
 
-	// and claim persisted
-	claimFound2 := input.PeggyKeeper.HasClaim(ctx, &ethClaim2)
-	assert.True(t, claimFound2)
 	// and attestation persisted
-	a2 := input.PeggyKeeper.GetAttestation(ctx, myNonce, &ethClaim1)
+	a2 := input.PeggyKeeper.GetAttestation(ctx, myNonce, ethClaim1.ClaimHash())
 	require.NotNil(t, a2)
 	// and vouchers now added to the account
 	balance2 := input.BankKeeper.GetAllBalances(ctx, myCosmosAddr)
-	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance2)
+	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance2)
 
 	// when
 	ctx = ctx.WithBlockTime(myBlockTime)
 	_, err = h(ctx, &ethClaim3)
+	EndBlocker(ctx, input.PeggyKeeper)
 	require.NoError(t, err)
 
-	// and claim persisted
-	claimFound3 := input.PeggyKeeper.HasClaim(ctx, &ethClaim2)
-	assert.True(t, claimFound3)
 	// and attestation persisted
-	a3 := input.PeggyKeeper.GetAttestation(ctx, myNonce, &ethClaim1)
+	a3 := input.PeggyKeeper.GetAttestation(ctx, myNonce, ethClaim1.ClaimHash())
 	require.NotNil(t, a3)
 	// and no additional added to the account
 	balance3 := input.BankKeeper.GetAllBalances(ctx, myCosmosAddr)
-	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance3)
+	assert.Equal(t, sdk.Coins{sdk.NewInt64Coin("peggy0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e", 12)}, balance3)
 }
 
 func TestMsgSetOrchestratorAddresses(t *testing.T) {

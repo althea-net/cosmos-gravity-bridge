@@ -97,16 +97,20 @@ async fn main() {
             denom: fee_denom,
             amount: 1u64.into(),
         };
-        let peggy_denom = format!("peggy/{}", erc20_address);
+        let peggy_denom = format!("peggy{}", erc20_address);
         let contact = Contact::new(&cosmos_url, TIMEOUT);
         let amount = Coin {
             amount,
             denom: peggy_denom.clone(),
         };
+        let bridge_fee = Coin {
+            denom: peggy_denom.clone(),
+            amount: 1u64.into(),
+        };
         let eth_dest: EthAddress = args.flag_eth_destination.parse().unwrap();
 
         println!("Locking funds into the batch pool");
-        send_to_eth(cosmos_key, eth_dest, amount, fee.clone(), &contact)
+        send_to_eth(cosmos_key, eth_dest, amount, bridge_fee, &contact)
             .await
             .expect("Failed to Send to ETH");
 

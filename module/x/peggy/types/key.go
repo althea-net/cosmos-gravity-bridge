@@ -81,6 +81,9 @@ var (
 
 	// KeyOrchestratorAddress indexes the validator keys for an orchestrator
 	KeyOrchestratorAddress = []byte{0xe8}
+
+	// LastObservedEthereumBlockHeightKey indexes the latest Ethereum block height
+	LastObservedEthereumBlockHeightKey = []byte{0xf9}
 )
 
 // GetOrchestratorAddressKey returns the following key format
@@ -143,13 +146,7 @@ func GetClaimKey(details EthereumClaim) []byte {
 // details because each Attestation is aggregating all claims of a specific event, lets say
 // validator X and validator y where making different claims about the same event nonce
 // Note that the claim hash does NOT include the claimer address and only identifies an event
-func GetAttestationKey(eventNonce uint64, details EthereumClaim) []byte {
-	var claimHash []byte
-	if details != nil {
-		claimHash = details.ClaimHash()
-	} else {
-		panic("No claim without details!")
-	}
+func GetAttestationKey(eventNonce uint64, claimHash []byte) []byte {
 	key := make([]byte, len(OracleAttestationKey)+len(UInt64Bytes(0))+len(claimHash))
 	copy(key[0:], OracleAttestationKey)
 	copy(key[len(OracleAttestationKey):], UInt64Bytes(eventNonce))
