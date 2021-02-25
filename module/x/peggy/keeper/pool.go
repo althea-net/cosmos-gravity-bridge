@@ -188,10 +188,11 @@ func (k Keeper) CreateBatchFees(ctx sdk.Context) (batchFees []*types.BatchFees) 
 	defer iter.Close()
 
 	batchFeesMap := make(map[string]types.BatchFees)
+	txCountMap := make(map[string]int)
+
 	for ; iter.Valid(); iter.Next() {
 		var ids types.IDSet
 		k.cdc.MustUnmarshalBinaryBare(iter.Value(), &ids)
-		idsLen := len(ids.Ids)
 
 		// create a map to store the token contract address and its total fee
 		// Parse the iterator key to get contract address & fee
@@ -203,23 +204,29 @@ func (k Keeper) CreateBatchFees(ctx sdk.Context) (batchFees []*types.BatchFees) 
 
 		feeAmountBytes := key[len(tokenContractBytes):]
 		feeAmount := big.NewInt(0).SetBytes(feeAmountBytes)
-		feeAmount = feeAmount.Mul(feeAmount, big.NewInt(int64(idsLen)))
 
-		if _, ok := batchFeesMap[tokenContractAddr]; ok {
-			batchFeesMap[tokenContractAddr].TotalInPool.Int = batchFeesMap[tokenContractAddr].TotalInPool.Int.Add(sdk.NewIntFromBigInt(feeAmount))
-		} else {
-			batchFeesMap[tokenContractAddr] = types.BatchFees{
-				Token:       tokenContractAddr,
-				TotalInPool: &sdk.IntProto{Int: sdk.NewIntFromBigInt(feeAmount)}}
+		for i := 0; i < len(ids.Ids); i++ {
+			if txCountMap[tokenContractAddr] >= OutgoingTxBatchSize {
+				break
+			} else {
+				// add fee amount
+				if _, ok := batchFeesMap[tokenContractAddr]; ok {
+					batchFeesMap[tokenContractAddr].TopOneHundred.Int = batchFeesMap[tokenContractAddr].TopOneHundred.Int.Add(sdk.NewIntFromBigInt(feeAmount))
+				} else {
+					batchFeesMap[tokenContractAddr] = types.BatchFees{
+						Token:         tokenContractAddr,
+						TopOneHundred: &sdk.IntProto{Int: sdk.NewIntFromBigInt(feeAmount)}}
+				}
+
+				txCountMap[tokenContractAddr] = txCountMap[tokenContractAddr] + 1
+			}
 		}
 	}
 
 	// create array of batchFees
 	for _, batchFee := range batchFeesMap {
-
 		newBatchFee := types.BatchFees{
 			Token:         batchFee.Token,
-			TotalInPool:   batchFee.TotalInPool,
 			TopOneHundred: batchFee.TopOneHundred,
 		}
 		batchFees = append(batchFees, &newBatchFee)
