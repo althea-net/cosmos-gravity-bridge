@@ -181,21 +181,21 @@ func (k Keeper) IterateOutgoingPoolByFee(ctx sdk.Context, contract string, cb fu
 	return
 }
 
-// CreateTokenFeeMap iterates over the outgoing pool and create token fee map
-func (k Keeper) CreateTokenFeeMap(ctx sdk.Context) map[string]string {
+// CreateBatchFees iterates over the outgoing pool and create batch token fee map
+func (k Keeper) CreateBatchFees(ctx sdk.Context) (batchFees []*types.BatchFees) {
 	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.SecondIndexOutgoingTXFeeKey)
 	iter := prefixStore.Iterator(nil, nil)
 	defer iter.Close()
 
-	tokenFeeMap := make(map[string]string)
+	batchFeesMap := make(map[string]types.BatchFees)
 	for ; iter.Valid(); iter.Next() {
 		var ids types.IDSet
 		k.cdc.MustUnmarshalBinaryBare(iter.Value(), &ids)
 		idsLen := len(ids.Ids)
 
 		// create a map to store the token contract address and its total fee
-		// Break the iterator key to get contract address & fee
-		// If len(ids.Ids) > 1, multiple fee amount with len(ids.Ids) and add it to total fee amount
+		// Parse the iterator key to get contract address & fee
+		// If len(ids.Ids) > 1, multiply fee amount with len(ids.Ids) and add it to total fee amount
 
 		key := iter.Key()
 		tokenContractBytes := key[:types.ETHContractAddressLen]
@@ -203,15 +203,29 @@ func (k Keeper) CreateTokenFeeMap(ctx sdk.Context) map[string]string {
 
 		feeAmountBytes := key[len(tokenContractBytes):]
 		feeAmount := big.NewInt(0).SetBytes(feeAmountBytes)
+		feeAmount = feeAmount.Mul(feeAmount, big.NewInt(int64(idsLen)))
 
-		if prevFeeAmountStr, ok := tokenFeeMap[tokenContractAddr]; ok {
-			prevFeeAmount, _ := big.NewInt(0).SetString(prevFeeAmountStr, 10)
-			tokenFeeMap[tokenContractAddr] = prevFeeAmount.Add(prevFeeAmount, feeAmount.Mul(feeAmount, big.NewInt(int64(idsLen)))).String()
+		if _, ok := batchFeesMap[tokenContractAddr]; ok {
+			batchFeesMap[tokenContractAddr].TotalInPool.Int = batchFeesMap[tokenContractAddr].TotalInPool.Int.Add(sdk.NewIntFromBigInt(feeAmount))
 		} else {
-			tokenFeeMap[tokenContractAddr] = feeAmount.Mul(feeAmount, big.NewInt(int64(idsLen))).String()
+			batchFeesMap[tokenContractAddr] = types.BatchFees{
+				Token:       tokenContractAddr,
+				TotalInPool: &sdk.IntProto{Int: sdk.NewIntFromBigInt(feeAmount)}}
 		}
 	}
-	return tokenFeeMap
+
+	// create array of batchFees
+	for _, batchFee := range batchFeesMap {
+
+		newBatchFee := types.BatchFees{
+			Token:         batchFee.Token,
+			TotalInPool:   batchFee.TotalInPool,
+			TopOneHundred: batchFee.TopOneHundred,
+		}
+		batchFees = append(batchFees, &newBatchFee)
+	}
+
+	return
 }
 
 func (k Keeper) autoIncrementID(ctx sdk.Context, idKey []byte) uint64 {

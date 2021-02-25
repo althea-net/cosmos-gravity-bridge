@@ -87,9 +87,9 @@ func (k Keeper) LastPendingValsetRequestByAddr(c context.Context, req *types.Que
 	return &types.QueryLastPendingValsetRequestByAddrResponse{Valsets: pendingValsetReq}, nil
 }
 
-// TokenFeeMap queries the tokenfees from unbatched pool
-func (k Keeper) TokenFeeMap(c context.Context, req *types.QueryTokenFeeMapRequest) (*types.QueryTokenFeeMapResponse, error) {
-	return &types.QueryTokenFeeMapResponse{TokenFeeMap: k.CreateTokenFeeMap(sdk.UnwrapSDKContext(c))}, nil
+// BatchFees queries the batch fees from unbatched pool
+func (k Keeper) BatchFees(c context.Context, req *types.QueryBatchFeeRequest) (*types.QueryBatchFeeResponse, error) {
+	return &types.QueryBatchFeeResponse{BatchFees: k.CreateBatchFees(sdk.UnwrapSDKContext(c))}, nil
 }
 
 // LastPendingBatchRequestByAddr queries the LastPendingBatchRequestByAddr of the peggy module
