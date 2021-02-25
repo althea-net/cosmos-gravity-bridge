@@ -19,6 +19,7 @@ message OutgoingTx {
 message IDSet { repeated uint64 ids = 1; }
 
 message BatchFees {  
-  string token = 1;
-  cosmos.base.v1beta1.IntProto topOneHundred = 2;  
+  string token = 1;  
+  string topOneHundred = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
+
 }

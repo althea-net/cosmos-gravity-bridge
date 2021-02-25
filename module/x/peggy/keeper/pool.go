@@ -187,7 +187,7 @@ func (k Keeper) CreateBatchFees(ctx sdk.Context) (batchFees []*types.BatchFees) 
 	iter := prefixStore.Iterator(nil, nil)
 	defer iter.Close()
 
-	batchFeesMap := make(map[string]types.BatchFees)
+	batchFeesMap := make(map[string]*types.BatchFees)
 	txCountMap := make(map[string]int)
 
 	for ; iter.Valid(); iter.Next() {
@@ -211,11 +211,11 @@ func (k Keeper) CreateBatchFees(ctx sdk.Context) (batchFees []*types.BatchFees) 
 			} else {
 				// add fee amount
 				if _, ok := batchFeesMap[tokenContractAddr]; ok {
-					batchFeesMap[tokenContractAddr].TopOneHundred.Int = batchFeesMap[tokenContractAddr].TopOneHundred.Int.Add(sdk.NewIntFromBigInt(feeAmount))
+					batchFeesMap[tokenContractAddr].TopOneHundred = batchFeesMap[tokenContractAddr].TopOneHundred.Add(sdk.NewIntFromBigInt(feeAmount))
 				} else {
-					batchFeesMap[tokenContractAddr] = types.BatchFees{
+					batchFeesMap[tokenContractAddr] = &types.BatchFees{
 						Token:         tokenContractAddr,
-						TopOneHundred: &sdk.IntProto{Int: sdk.NewIntFromBigInt(feeAmount)}}
+						TopOneHundred: sdk.NewIntFromBigInt(feeAmount)}
 				}
 
 				txCountMap[tokenContractAddr] = txCountMap[tokenContractAddr] + 1
@@ -225,11 +225,11 @@ func (k Keeper) CreateBatchFees(ctx sdk.Context) (batchFees []*types.BatchFees) 
 
 	// create array of batchFees
 	for _, batchFee := range batchFeesMap {
-		newBatchFee := types.BatchFees{
-			Token:         batchFee.Token,
-			TopOneHundred: batchFee.TopOneHundred,
-		}
-		batchFees = append(batchFees, &newBatchFee)
+		// newBatchFee := types.BatchFees{
+		// 	Token:         batchFee.Token,
+		// 	TopOneHundred: batchFee.TopOneHundred,
+		// }
+		batchFees = append(batchFees, batchFee)
 	}
 
 	return
