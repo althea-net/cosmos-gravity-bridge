@@ -43,6 +43,10 @@ service Query {
   rpc LastEventNonceByAddr(QueryLastEventNonceByAddrRequest) returns (QueryLastEventNonceByAddrResponse) {
     option (google.api.http).get = "/peggy/v1beta/oracle/eventnonce/{address}";
   }
+  rpc TokenFeeMap(QueryTokenFeeMapRequest) returns (QueryTokenFeeMapResponse) {
+    option (google.api.http).get = "/injective/peggy/v1beta/tokenfeemap";
+  }
+
   rpc OutgoingTxBatches(QueryOutgoingTxBatchesRequest) returns (QueryOutgoingTxBatchesResponse) {
     option (google.api.http).get = "/peggy/v1beta/batch/outgoingtx";
   }
@@ -80,6 +84,10 @@ message QueryLastValsetRequestsResponse { repeated Valset valsets = 1; }
 
 message QueryLastPendingValsetRequestByAddrRequest { string address = 1; }
 message QueryLastPendingValsetRequestByAddrResponse { repeated Valset valsets = 1; }
+
+message QueryTokenFeeMapRequest {}
+message QueryTokenFeeMapResponse { map<string, string> tokenFeeMap = 1; }
+
 
 message QueryLastPendingBatchRequestByAddrRequest { string address = 1; }
 message QueryLastPendingBatchRequestByAddrResponse { OutgoingTxBatch batch = 1; }
