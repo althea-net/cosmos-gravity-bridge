@@ -100,7 +100,7 @@ func TestTotalBatchFeeInPool(t *testing.T) {
 		t.Logf("___ response: %#v", r)
 	}
 
-	// token 2
+	// token 2 - Only top 100
 	var (
 		myToken2ContractAddr = "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0"
 	)
@@ -114,10 +114,12 @@ func TestTotalBatchFeeInPool(t *testing.T) {
 	err = input.BankKeeper.SetBalances(ctx, mySender, allVouchers)
 	require.NoError(t, err)
 
+	// Add
+
 	// create outgoing pool
-	for i, v := range []uint64{4, 1844674407370955141, 1844674407370955141, 1844674407370955141} {
+	for i := 0; i < 110; i++ {
 		amount := types.NewERC20Token(uint64(i+100), myToken2ContractAddr).PeggyCoin()
-		fee := types.NewERC20Token(v, myToken2ContractAddr).PeggyCoin()
+		fee := types.NewERC20Token(uint64(5), myToken2ContractAddr).PeggyCoin()
 		r, err := input.PeggyKeeper.AddToOutgoingPool(ctx, mySender, myReceiver, amount, fee)
 		require.NoError(t, err)
 		t.Logf("___ response: %#v", r)
@@ -126,8 +128,9 @@ func TestTotalBatchFeeInPool(t *testing.T) {
 	batchFees := input.PeggyKeeper.CreateBatchFees(ctx)
 	/*
 		tokenFeeMap should be
-		map[0x429881672B9AE42b8EbA0E26cD9C73711b891Ca5:8 0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0:5534023222112865427]
+		map[0x429881672B9AE42b8EbA0E26cD9C73711b891Ca5:8 0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0:500]
 		**/
 	assert.Equal(t, batchFees[0].TopOneHundred.Int.BigInt(), big.NewInt(int64(8)))
-	assert.Equal(t, batchFees[1].TopOneHundred.Int.BigInt(), big.NewInt(int64(5534023222112865427)))
+	assert.Equal(t, batchFees[1].TopOneHundred.Int.BigInt(), big.NewInt(int64(500)))
+
 }
