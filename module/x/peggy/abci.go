@@ -61,13 +61,12 @@ func slashing(ctx sdk.Context, k keeper.Keeper) {
 					break
 				}
 			}
-
 			if !found {
-				// slash validators for not confirming valsets
 				cons, _ := val.GetConsAddr()
-				k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), val.ConsensusPower(), params.SlashFractionValset)
+				k.StakingKeeper.Slash(ctx, cons,
+					ctx.BlockHeight(), val.ConsensusPower(),
+					params.SlashFractionValset)
 				k.StakingKeeper.Jail(ctx, cons)
-
 			}
 		}
 

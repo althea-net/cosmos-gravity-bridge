@@ -637,6 +637,86 @@ func (m *QueryLastPendingValsetRequestByAddrResponse) GetValsets() []*Valset {
 	return nil
 }
 
+type QueryBatchFeeRequest struct {
+}
+
+func (m *QueryBatchFeeRequest) Reset()         { *m = QueryBatchFeeRequest{} }
+func (m *QueryBatchFeeRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryBatchFeeRequest) ProtoMessage()    {}
+func (*QueryBatchFeeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8c7b3f17e5a42134, []int{14}
+}
+func (m *QueryBatchFeeRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryBatchFeeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryBatchFeeRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryBatchFeeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBatchFeeRequest.Merge(m, src)
+}
+func (m *QueryBatchFeeRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryBatchFeeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBatchFeeRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryBatchFeeRequest proto.InternalMessageInfo
+
+type QueryBatchFeeResponse struct {
+	BatchFees []*BatchFees `protobuf:"bytes,1,rep,name=batchFees,proto3" json:"batchFees,omitempty"`
+}
+
+func (m *QueryBatchFeeResponse) Reset()         { *m = QueryBatchFeeResponse{} }
+func (m *QueryBatchFeeResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryBatchFeeResponse) ProtoMessage()    {}
+func (*QueryBatchFeeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8c7b3f17e5a42134, []int{15}
+}
+func (m *QueryBatchFeeResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryBatchFeeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryBatchFeeResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryBatchFeeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBatchFeeResponse.Merge(m, src)
+}
+func (m *QueryBatchFeeResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryBatchFeeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBatchFeeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryBatchFeeResponse proto.InternalMessageInfo
+
+func (m *QueryBatchFeeResponse) GetBatchFees() []*BatchFees {
+	if m != nil {
+		return m.BatchFees
+	}
+	return nil
+}
+
 type QueryLastPendingBatchRequestByAddrRequest struct {
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 }
@@ -649,7 +729,7 @@ func (m *QueryLastPendingBatchRequestByAddrRequest) String() string {
 }
 func (*QueryLastPendingBatchRequestByAddrRequest) ProtoMessage() {}
 func (*QueryLastPendingBatchRequestByAddrRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{14}
+	return fileDescriptor_8c7b3f17e5a42134, []int{16}
 }
 func (m *QueryLastPendingBatchRequestByAddrRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -697,7 +777,7 @@ func (m *QueryLastPendingBatchRequestByAddrResponse) String() string {
 }
 func (*QueryLastPendingBatchRequestByAddrResponse) ProtoMessage() {}
 func (*QueryLastPendingBatchRequestByAddrResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{15}
+	return fileDescriptor_8c7b3f17e5a42134, []int{17}
 }
 func (m *QueryLastPendingBatchRequestByAddrResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -743,7 +823,7 @@ func (m *QueryLastPendingLogicCallByAddrRequest) Reset() {
 func (m *QueryLastPendingLogicCallByAddrRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryLastPendingLogicCallByAddrRequest) ProtoMessage()    {}
 func (*QueryLastPendingLogicCallByAddrRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{16}
+	return fileDescriptor_8c7b3f17e5a42134, []int{18}
 }
 func (m *QueryLastPendingLogicCallByAddrRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -789,7 +869,7 @@ func (m *QueryLastPendingLogicCallByAddrResponse) Reset() {
 func (m *QueryLastPendingLogicCallByAddrResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryLastPendingLogicCallByAddrResponse) ProtoMessage()    {}
 func (*QueryLastPendingLogicCallByAddrResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{17}
+	return fileDescriptor_8c7b3f17e5a42134, []int{19}
 }
 func (m *QueryLastPendingLogicCallByAddrResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -832,7 +912,7 @@ func (m *QueryOutgoingTxBatchesRequest) Reset()         { *m = QueryOutgoingTxBa
 func (m *QueryOutgoingTxBatchesRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryOutgoingTxBatchesRequest) ProtoMessage()    {}
 func (*QueryOutgoingTxBatchesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{18}
+	return fileDescriptor_8c7b3f17e5a42134, []int{20}
 }
 func (m *QueryOutgoingTxBatchesRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -869,7 +949,7 @@ func (m *QueryOutgoingTxBatchesResponse) Reset()         { *m = QueryOutgoingTxB
 func (m *QueryOutgoingTxBatchesResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryOutgoingTxBatchesResponse) ProtoMessage()    {}
 func (*QueryOutgoingTxBatchesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{19}
+	return fileDescriptor_8c7b3f17e5a42134, []int{21}
 }
 func (m *QueryOutgoingTxBatchesResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -912,7 +992,7 @@ func (m *QueryOutgoingLogicCallsRequest) Reset()         { *m = QueryOutgoingLog
 func (m *QueryOutgoingLogicCallsRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryOutgoingLogicCallsRequest) ProtoMessage()    {}
 func (*QueryOutgoingLogicCallsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{20}
+	return fileDescriptor_8c7b3f17e5a42134, []int{22}
 }
 func (m *QueryOutgoingLogicCallsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -949,7 +1029,7 @@ func (m *QueryOutgoingLogicCallsResponse) Reset()         { *m = QueryOutgoingLo
 func (m *QueryOutgoingLogicCallsResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryOutgoingLogicCallsResponse) ProtoMessage()    {}
 func (*QueryOutgoingLogicCallsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{21}
+	return fileDescriptor_8c7b3f17e5a42134, []int{23}
 }
 func (m *QueryOutgoingLogicCallsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -994,7 +1074,7 @@ func (m *QueryBatchRequestByNonceRequest) Reset()         { *m = QueryBatchReque
 func (m *QueryBatchRequestByNonceRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryBatchRequestByNonceRequest) ProtoMessage()    {}
 func (*QueryBatchRequestByNonceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{22}
+	return fileDescriptor_8c7b3f17e5a42134, []int{24}
 }
 func (m *QueryBatchRequestByNonceRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1045,7 +1125,7 @@ func (m *QueryBatchRequestByNonceResponse) Reset()         { *m = QueryBatchRequ
 func (m *QueryBatchRequestByNonceResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryBatchRequestByNonceResponse) ProtoMessage()    {}
 func (*QueryBatchRequestByNonceResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{23}
+	return fileDescriptor_8c7b3f17e5a42134, []int{25}
 }
 func (m *QueryBatchRequestByNonceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1090,7 +1170,7 @@ func (m *QueryBatchConfirmsRequest) Reset()         { *m = QueryBatchConfirmsReq
 func (m *QueryBatchConfirmsRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryBatchConfirmsRequest) ProtoMessage()    {}
 func (*QueryBatchConfirmsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{24}
+	return fileDescriptor_8c7b3f17e5a42134, []int{26}
 }
 func (m *QueryBatchConfirmsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1141,7 +1221,7 @@ func (m *QueryBatchConfirmsResponse) Reset()         { *m = QueryBatchConfirmsRe
 func (m *QueryBatchConfirmsResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryBatchConfirmsResponse) ProtoMessage()    {}
 func (*QueryBatchConfirmsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{25}
+	return fileDescriptor_8c7b3f17e5a42134, []int{27}
 }
 func (m *QueryBatchConfirmsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1186,7 +1266,7 @@ func (m *QueryLogicConfirmsRequest) Reset()         { *m = QueryLogicConfirmsReq
 func (m *QueryLogicConfirmsRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryLogicConfirmsRequest) ProtoMessage()    {}
 func (*QueryLogicConfirmsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{26}
+	return fileDescriptor_8c7b3f17e5a42134, []int{28}
 }
 func (m *QueryLogicConfirmsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1237,7 +1317,7 @@ func (m *QueryLogicConfirmsResponse) Reset()         { *m = QueryLogicConfirmsRe
 func (m *QueryLogicConfirmsResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryLogicConfirmsResponse) ProtoMessage()    {}
 func (*QueryLogicConfirmsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{27}
+	return fileDescriptor_8c7b3f17e5a42134, []int{29}
 }
 func (m *QueryLogicConfirmsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1281,7 +1361,7 @@ func (m *QueryLastEventNonceByAddrRequest) Reset()         { *m = QueryLastEvent
 func (m *QueryLastEventNonceByAddrRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryLastEventNonceByAddrRequest) ProtoMessage()    {}
 func (*QueryLastEventNonceByAddrRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{28}
+	return fileDescriptor_8c7b3f17e5a42134, []int{30}
 }
 func (m *QueryLastEventNonceByAddrRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1325,7 +1405,7 @@ func (m *QueryLastEventNonceByAddrResponse) Reset()         { *m = QueryLastEven
 func (m *QueryLastEventNonceByAddrResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryLastEventNonceByAddrResponse) ProtoMessage()    {}
 func (*QueryLastEventNonceByAddrResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8c7b3f17e5a42134, []int{29}
+	return fileDescriptor_8c7b3f17e5a42134, []int{31}
 }
 func (m *QueryLastEventNonceByAddrResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1361,6 +1441,182 @@ func (m *QueryLastEventNonceByAddrResponse) GetEventNonce() uint64 {
 	return 0
 }
 
+type QueryERC20ToDenomRequest struct {
+	Erc20 string `protobuf:"bytes,1,opt,name=erc20,proto3" json:"erc20,omitempty"`
+}
+
+func (m *QueryERC20ToDenomRequest) Reset()         { *m = QueryERC20ToDenomRequest{} }
+func (m *QueryERC20ToDenomRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryERC20ToDenomRequest) ProtoMessage()    {}
+func (*QueryERC20ToDenomRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8c7b3f17e5a42134, []int{32}
+}
+func (m *QueryERC20ToDenomRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryERC20ToDenomRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryERC20ToDenomRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryERC20ToDenomRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryERC20ToDenomRequest.Merge(m, src)
+}
+func (m *QueryERC20ToDenomRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryERC20ToDenomRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryERC20ToDenomRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryERC20ToDenomRequest proto.InternalMessageInfo
+
+func (m *QueryERC20ToDenomRequest) GetErc20() string {
+	if m != nil {
+		return m.Erc20
+	}
+	return ""
+}
+
+type QueryERC20ToDenomResponse struct {
+	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
+}
+
+func (m *QueryERC20ToDenomResponse) Reset()         { *m = QueryERC20ToDenomResponse{} }
+func (m *QueryERC20ToDenomResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryERC20ToDenomResponse) ProtoMessage()    {}
+func (*QueryERC20ToDenomResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8c7b3f17e5a42134, []int{33}
+}
+func (m *QueryERC20ToDenomResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryERC20ToDenomResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryERC20ToDenomResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryERC20ToDenomResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryERC20ToDenomResponse.Merge(m, src)
+}
+func (m *QueryERC20ToDenomResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryERC20ToDenomResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryERC20ToDenomResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryERC20ToDenomResponse proto.InternalMessageInfo
+
+func (m *QueryERC20ToDenomResponse) GetDenom() string {
+	if m != nil {
+		return m.Denom
+	}
+	return ""
+}
+
+type QueryDenomToERC20Request struct {
+	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
+}
+
+func (m *QueryDenomToERC20Request) Reset()         { *m = QueryDenomToERC20Request{} }
+func (m *QueryDenomToERC20Request) String() string { return proto.CompactTextString(m) }
+func (*QueryDenomToERC20Request) ProtoMessage()    {}
+func (*QueryDenomToERC20Request) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8c7b3f17e5a42134, []int{34}
+}
+func (m *QueryDenomToERC20Request) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryDenomToERC20Request) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryDenomToERC20Request.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryDenomToERC20Request) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDenomToERC20Request.Merge(m, src)
+}
+func (m *QueryDenomToERC20Request) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryDenomToERC20Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDenomToERC20Request.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryDenomToERC20Request proto.InternalMessageInfo
+
+func (m *QueryDenomToERC20Request) GetDenom() string {
+	if m != nil {
+		return m.Denom
+	}
+	return ""
+}
+
+type QueryDenomToERC20Response struct {
+	Erc20 string `protobuf:"bytes,1,opt,name=erc20,proto3" json:"erc20,omitempty"`
+}
+
+func (m *QueryDenomToERC20Response) Reset()         { *m = QueryDenomToERC20Response{} }
+func (m *QueryDenomToERC20Response) String() string { return proto.CompactTextString(m) }
+func (*QueryDenomToERC20Response) ProtoMessage()    {}
+func (*QueryDenomToERC20Response) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8c7b3f17e5a42134, []int{35}
+}
+func (m *QueryDenomToERC20Response) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryDenomToERC20Response) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryDenomToERC20Response.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryDenomToERC20Response) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDenomToERC20Response.Merge(m, src)
+}
+func (m *QueryDenomToERC20Response) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryDenomToERC20Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDenomToERC20Response.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryDenomToERC20Response proto.InternalMessageInfo
+
+func (m *QueryDenomToERC20Response) GetErc20() string {
+	if m != nil {
+		return m.Erc20
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "peggy.v1.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "peggy.v1.QueryParamsResponse")
@@ -1376,6 +1632,8 @@ func init() {
 	proto.RegisterType((*QueryLastValsetRequestsResponse)(nil), "peggy.v1.QueryLastValsetRequestsResponse")
 	proto.RegisterType((*QueryLastPendingValsetRequestByAddrRequest)(nil), "peggy.v1.QueryLastPendingValsetRequestByAddrRequest")
 	proto.RegisterType((*QueryLastPendingValsetRequestByAddrResponse)(nil), "peggy.v1.QueryLastPendingValsetRequestByAddrResponse")
+	proto.RegisterType((*QueryBatchFeeRequest)(nil), "peggy.v1.QueryBatchFeeRequest")
+	proto.RegisterType((*QueryBatchFeeResponse)(nil), "peggy.v1.QueryBatchFeeResponse")
 	proto.RegisterType((*QueryLastPendingBatchRequestByAddrRequest)(nil), "peggy.v1.QueryLastPendingBatchRequestByAddrRequest")
 	proto.RegisterType((*QueryLastPendingBatchRequestByAddrResponse)(nil), "peggy.v1.QueryLastPendingBatchRequestByAddrResponse")
 	proto.RegisterType((*QueryLastPendingLogicCallByAddrRequest)(nil), "peggy.v1.QueryLastPendingLogicCallByAddrRequest")
@@ -1392,88 +1650,103 @@ func init() {
 	proto.RegisterType((*QueryLogicConfirmsResponse)(nil), "peggy.v1.QueryLogicConfirmsResponse")
 	proto.RegisterType((*QueryLastEventNonceByAddrRequest)(nil), "peggy.v1.QueryLastEventNonceByAddrRequest")
 	proto.RegisterType((*QueryLastEventNonceByAddrResponse)(nil), "peggy.v1.QueryLastEventNonceByAddrResponse")
+	proto.RegisterType((*QueryERC20ToDenomRequest)(nil), "peggy.v1.QueryERC20ToDenomRequest")
+	proto.RegisterType((*QueryERC20ToDenomResponse)(nil), "peggy.v1.QueryERC20ToDenomResponse")
+	proto.RegisterType((*QueryDenomToERC20Request)(nil), "peggy.v1.QueryDenomToERC20Request")
+	proto.RegisterType((*QueryDenomToERC20Response)(nil), "peggy.v1.QueryDenomToERC20Response")
 }
 
 func init() { proto.RegisterFile("peggy/v1/query.proto", fileDescriptor_8c7b3f17e5a42134) }
 
 var fileDescriptor_8c7b3f17e5a42134 = []byte{
-	// 1202 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x98, 0xcf, 0x6f, 0xdc, 0x44,
-	0x14, 0xc7, 0xe3, 0x92, 0x1f, 0xe5, 0x95, 0xd2, 0x66, 0x12, 0xaa, 0xc4, 0xc9, 0x6e, 0x12, 0xa7,
-	0x34, 0xbf, 0xe8, 0xba, 0xdb, 0xa4, 0x48, 0x95, 0xb8, 0x74, 0x43, 0x2a, 0x01, 0x2d, 0x94, 0xa5,
-	0x80, 0xa8, 0x8a, 0x22, 0xaf, 0x77, 0x70, 0x2c, 0x39, 0xf6, 0xd6, 0xf6, 0x46, 0x89, 0xaa, 0x4a,
-	0x88, 0x3f, 0x00, 0x15, 0x01, 0x17, 0x8e, 0x9c, 0x38, 0xc2, 0x7f, 0xd1, 0x63, 0x25, 0x2e, 0x9c,
-	0x10, 0x4a, 0xf8, 0x43, 0x90, 0x67, 0x9e, 0xbd, 0x3b, 0x9e, 0xb1, 0x77, 0xb7, 0xe2, 0x94, 0x78,
-	0xfc, 0xe6, 0x7d, 0x3f, 0xcf, 0x33, 0xf3, 0xe6, 0xab, 0x85, 0xd9, 0x0e, 0x75, 0x9c, 0x13, 0xf3,
-	0xa8, 0x6e, 0x3e, 0xe9, 0xd2, 0xf0, 0xa4, 0xd6, 0x09, 0x83, 0x38, 0x20, 0xe7, 0xd9, 0x68, 0xed,
-	0xa8, 0xae, 0x5f, 0xc9, 0xde, 0x3b, 0xd4, 0xa7, 0x91, 0x1b, 0xf1, 0x08, 0xbd, 0x37, 0x2f, 0x3e,
-	0xe9, 0xd0, 0x74, 0x74, 0x26, 0x1b, 0x3d, 0x8c, 0x1c, 0x39, 0xb4, 0x65, 0xc5, 0xf6, 0x01, 0x8e,
-	0x2e, 0x3a, 0x41, 0xe0, 0x78, 0xd4, 0xb4, 0x3a, 0xae, 0x69, 0xf9, 0x7e, 0x10, 0x5b, 0xb1, 0x1b,
-	0xf8, 0xd9, 0x1c, 0x27, 0x70, 0x02, 0xf6, 0xaf, 0x99, 0xfc, 0xc7, 0x47, 0x8d, 0x59, 0x20, 0x9f,
-	0x26, 0x94, 0x0f, 0xac, 0xd0, 0x3a, 0x8c, 0x9a, 0xf4, 0x49, 0x97, 0x46, 0xb1, 0xb1, 0x07, 0x33,
-	0xc2, 0x68, 0xd4, 0x09, 0xfc, 0x88, 0x92, 0x1a, 0x4c, 0x76, 0xd8, 0xc8, 0x9c, 0xb6, 0xac, 0xad,
-	0x5f, 0xb8, 0x79, 0xb9, 0x96, 0x16, 0x55, 0xe3, 0x91, 0x8d, 0xf1, 0x17, 0x7f, 0x2f, 0x8d, 0x35,
-	0x31, 0xca, 0x58, 0x80, 0x79, 0x96, 0x66, 0xb7, 0x1b, 0x86, 0xd4, 0x8f, 0xbf, 0xb0, 0xbc, 0x88,
-	0xc6, 0xa9, 0xc6, 0x5d, 0xd0, 0x55, 0x2f, 0x51, 0x6a, 0x1d, 0x26, 0x8f, 0xd8, 0x88, 0x2c, 0x85,
-	0x91, 0xf8, 0xde, 0xa8, 0xa3, 0x88, 0x90, 0x1d, 0xff, 0x90, 0x59, 0x98, 0xf0, 0x03, 0xdf, 0xa6,
-	0x2c, 0xcb, 0x78, 0x93, 0x3f, 0x64, 0xd2, 0xb9, 0x29, 0x23, 0x4b, 0x7f, 0x24, 0x48, 0xef, 0x06,
-	0xfe, 0x37, 0x6e, 0x78, 0x58, 0x2a, 0x4d, 0xe6, 0x60, 0xca, 0x6a, 0xb7, 0x43, 0x1a, 0x45, 0x73,
-	0xe7, 0x96, 0xb5, 0xf5, 0xd7, 0x9b, 0xe9, 0xa3, 0xd1, 0x14, 0xa0, 0xb2, 0x64, 0x08, 0xb5, 0x03,
-	0x53, 0x36, 0x1f, 0x42, 0x2a, 0xbd, 0x47, 0x75, 0x3f, 0x72, 0xc4, 0x49, 0x69, 0xa8, 0x71, 0x1b,
-	0x56, 0xe4, 0x9c, 0x51, 0xe3, 0xe4, 0xe3, 0x84, 0xa5, 0xfc, 0x1b, 0x3d, 0x06, 0xa3, 0x6c, 0x2a,
-	0x62, 0xbd, 0x0b, 0xe7, 0x51, 0x2b, 0xd9, 0x13, 0xaf, 0x0d, 0xe0, 0xca, 0x62, 0x8d, 0x65, 0xa8,
-	0xb2, 0xec, 0xf7, 0xac, 0x48, 0xdc, 0x16, 0xd9, 0x16, 0xbc, 0x0f, 0x4b, 0x85, 0x11, 0x28, 0xbe,
-	0x09, 0x53, 0x7c, 0x21, 0x52, 0x6d, 0x79, 0xa5, 0xd2, 0x00, 0xe3, 0x2e, 0x6c, 0x66, 0xe9, 0x1e,
-	0x50, 0xbf, 0xed, 0xfa, 0x8e, 0x90, 0xb5, 0x71, 0x72, 0xa7, 0xdd, 0x0e, 0xd3, 0x4f, 0xd2, 0xb7,
-	0x4a, 0x9a, 0xb8, 0x4a, 0x5f, 0xc1, 0xd6, 0x50, 0x79, 0x5e, 0x01, 0x71, 0x0f, 0x36, 0xf2, 0xa9,
-	0x1b, 0xc9, 0xe9, 0x1e, 0x91, 0xf0, 0x6b, 0xb9, 0x52, 0x55, 0x1a, 0x04, 0x34, 0x61, 0x82, 0xb5,
-	0x10, 0xdc, 0x55, 0xf3, 0x3d, 0xbc, 0x4f, 0xba, 0xb1, 0x13, 0xb8, 0xbe, 0xf3, 0xf0, 0x98, 0x4f,
-	0xe7, 0x71, 0x46, 0x03, 0xae, 0xe5, 0xd3, 0xdf, 0x0b, 0x1c, 0xd7, 0xde, 0xb5, 0x3c, 0x6f, 0x58,
-	0xc4, 0x47, 0xb0, 0x36, 0x30, 0x47, 0xc6, 0x37, 0x6e, 0x5b, 0x9e, 0x87, 0x78, 0x0b, 0x32, 0x5e,
-	0x36, 0xb1, 0xc9, 0x02, 0x8d, 0x25, 0xa8, 0xb0, 0xdc, 0x39, 0x7c, 0x9a, 0x6d, 0xac, 0xcf, 0x71,
-	0xeb, 0x29, 0x02, 0x50, 0x73, 0x1b, 0xa6, 0x5a, 0x7c, 0x08, 0x17, 0xad, 0xe4, 0xab, 0xa4, 0x91,
-	0xd9, 0x8e, 0x96, 0xb8, 0x32, 0xe1, 0x87, 0xb8, 0xa3, 0x55, 0x11, 0xa8, 0x5c, 0x87, 0x89, 0xa4,
-	0x88, 0x54, 0xb7, 0xb4, 0x5c, 0x1e, 0x69, 0xb4, 0x30, 0xab, 0xb8, 0xc6, 0x83, 0x0f, 0x38, 0xd9,
-	0x80, 0xcb, 0x76, 0xe0, 0xc7, 0xa1, 0x65, 0xc7, 0xfb, 0x62, 0x4b, 0xba, 0x94, 0x8e, 0xdf, 0xc1,
-	0xf5, 0xfa, 0x0c, 0x96, 0x8b, 0x35, 0x5e, 0x75, 0x23, 0x3d, 0xc6, 0xe6, 0xc9, 0x06, 0xd3, 0xfe,
-	0xf2, 0x3f, 0x22, 0xeb, 0xaa, 0xec, 0x08, 0x7b, 0x4b, 0x6a, 0x5b, 0xf3, 0x42, 0xdb, 0xc2, 0x09,
-	0x9c, 0xb7, 0xd7, 0xb5, 0x22, 0x44, 0xe6, 0x8b, 0x90, 0x43, 0x5e, 0x83, 0x4b, 0xae, 0x7f, 0x64,
-	0x79, 0x6e, 0x9b, 0x5d, 0xbb, 0xfb, 0x6e, 0x9b, 0xc1, 0xbf, 0xd1, 0x7c, 0xb3, 0x7f, 0xf8, 0x83,
-	0x36, 0xb9, 0x0e, 0x44, 0x08, 0xe4, 0x85, 0x9e, 0x63, 0x85, 0x4e, 0xf7, 0xbf, 0x61, 0x1f, 0xd8,
-	0xf8, 0x12, 0x2b, 0xc9, 0x89, 0x62, 0x25, 0xb7, 0xa5, 0x4a, 0x2a, 0xaa, 0x4a, 0x7a, 0xdb, 0xa6,
-	0x57, 0xcd, 0x7b, 0xb8, 0xaa, 0xc9, 0x29, 0xdc, 0x3b, 0xa2, 0x7e, 0xcc, 0xf4, 0x86, 0x3d, 0xc3,
-	0xef, 0xe3, 0xd5, 0xa2, 0x9e, 0x8d, 0x74, 0x4b, 0x70, 0x81, 0x26, 0xef, 0xf6, 0xfb, 0x17, 0x13,
-	0x68, 0x16, 0x7e, 0xf3, 0xe7, 0x69, 0x98, 0x60, 0x69, 0x88, 0x0d, 0x93, 0xdc, 0x43, 0x90, 0xc5,
-	0x5e, 0x01, 0xb2, 0x35, 0xd1, 0x2b, 0x05, 0x6f, 0xb9, 0xa2, 0xb1, 0xf8, 0xdd, 0x9f, 0xff, 0xfe,
-	0x78, 0xee, 0x0a, 0x99, 0x35, 0x53, 0x8b, 0xd4, 0xa2, 0xb1, 0x65, 0x72, 0x43, 0x42, 0xbe, 0xd5,
-	0xe0, 0xa2, 0xe0, 0x37, 0xc8, 0x6a, 0x2e, 0x9d, 0xca, 0xaa, 0xe8, 0x57, 0xcb, 0x83, 0x50, 0xfa,
-	0x2a, 0x93, 0xae, 0x92, 0x45, 0x51, 0x9a, 0xb7, 0x77, 0xd3, 0xe6, 0x73, 0xc8, 0x31, 0x5c, 0x14,
-	0x92, 0x4b, 0x04, 0x2a, 0x1f, 0x23, 0x11, 0x28, 0x9d, 0x4b, 0x51, 0xf1, 0x9c, 0x80, 0x15, 0x2f,
-	0xdc, 0xc7, 0x05, 0xd2, 0xa2, 0x8f, 0x29, 0x90, 0xce, 0xf9, 0x93, 0x41, 0xc5, 0xa3, 0xe0, 0x2f,
-	0x1a, 0xbc, 0xa5, 0x34, 0x14, 0x64, 0xab, 0x4c, 0x25, 0xe7, 0x58, 0xf4, 0x77, 0x86, 0x0b, 0x46,
-	0xb4, 0x6b, 0x0c, 0x6d, 0x99, 0x54, 0x45, 0xb4, 0xf4, 0x1c, 0x98, 0x4f, 0xd9, 0xe6, 0x7c, 0x46,
-	0x9e, 0x6b, 0x40, 0x64, 0xb7, 0x41, 0xd6, 0x73, 0x62, 0x85, 0x96, 0x45, 0xdf, 0x18, 0x22, 0x12,
-	0x99, 0xde, 0x66, 0x4c, 0x4b, 0xa4, 0xa2, 0xfc, 0x5c, 0x61, 0xaa, 0xfd, 0xbb, 0x06, 0xd5, 0x72,
-	0xa7, 0x41, 0x76, 0x14, 0xa2, 0x03, 0x0d, 0x8e, 0x7e, 0x6b, 0xc4, 0x59, 0x88, 0xbd, 0xc2, 0xb0,
-	0x17, 0xc8, 0xbc, 0x12, 0xdb, 0xb3, 0xa2, 0x98, 0xfc, 0xa1, 0x41, 0xa5, 0xd4, 0x7a, 0x90, 0xed,
-	0x62, 0xed, 0x42, 0xbf, 0xa3, 0xef, 0x8c, 0x36, 0xa9, 0xfc, 0x33, 0xb3, 0x0b, 0xc8, 0x7c, 0x8a,
-	0xad, 0xec, 0x19, 0xf9, 0x4d, 0x03, 0xbd, 0xd8, 0x8b, 0x90, 0x1b, 0xc5, 0xda, 0x6a, 0xeb, 0xa3,
-	0xd7, 0x47, 0x98, 0x51, 0x8e, 0xea, 0x25, 0xe1, 0x7d, 0xa8, 0xbf, 0x6a, 0x30, 0xab, 0x6a, 0xb9,
-	0x64, 0x53, 0x21, 0x59, 0xd0, 0xd5, 0xf5, 0xad, 0xa1, 0x62, 0x11, 0xac, 0xce, 0xc0, 0xb6, 0xc8,
-	0x86, 0x08, 0x16, 0x84, 0x96, 0xed, 0x51, 0x93, 0xf5, 0x72, 0x76, 0x80, 0xfa, 0x20, 0xbf, 0xd7,
-	0x60, 0x5a, 0xb2, 0x57, 0x64, 0x2d, 0xa7, 0x5a, 0xe4, 0xd0, 0xf4, 0xf5, 0xc1, 0x81, 0xe5, 0x47,
-	0x9b, 0xaf, 0x6f, 0x80, 0xd3, 0xe2, 0x63, 0xf2, 0x93, 0x06, 0x44, 0xb6, 0x5d, 0xa4, 0x48, 0x48,
-	0xf2, 0x6e, 0xd2, 0xd1, 0x2e, 0xf6, 0x70, 0xc6, 0x06, 0x63, 0x5a, 0x25, 0x2b, 0x65, 0x4c, 0x6c,
-	0x59, 0xc9, 0x0f, 0x1a, 0xcc, 0x28, 0x3c, 0x15, 0xc9, 0xab, 0x15, 0x7b, 0x3b, 0x7d, 0x73, 0x98,
-	0x50, 0x24, 0x5b, 0x65, 0x64, 0x15, 0xb2, 0xa0, 0x3c, 0x0d, 0xd8, 0x05, 0x93, 0x5b, 0x42, 0x30,
-	0x4d, 0xd2, 0x2d, 0xa1, 0x32, 0x6c, 0xd2, 0x2d, 0xa1, 0xf4, 0x5d, 0x45, 0xb7, 0x04, 0x27, 0x48,
-	0x1b, 0x32, 0x43, 0x10, 0xdc, 0x8e, 0x84, 0xa0, 0x32, 0x60, 0x12, 0x82, 0xd2, 0x30, 0x15, 0x21,
-	0xf0, 0x73, 0x96, 0x22, 0x34, 0x3e, 0x7c, 0x71, 0x5a, 0xd5, 0x5e, 0x9e, 0x56, 0xb5, 0x7f, 0x4e,
-	0xab, 0xda, 0xf3, 0xb3, 0xea, 0xd8, 0xcb, 0xb3, 0xea, 0xd8, 0x5f, 0x67, 0xd5, 0xb1, 0x47, 0x37,
-	0x1c, 0x37, 0x3e, 0xe8, 0xb6, 0x6a, 0x76, 0x70, 0x68, 0x5a, 0x5e, 0x7c, 0x40, 0xad, 0xeb, 0x3e,
-	0x8d, 0x31, 0xd9, 0x61, 0xd0, 0xee, 0x7a, 0xd4, 0x3c, 0xc6, 0x47, 0xf6, 0x3b, 0x4e, 0x6b, 0x92,
-	0xfd, 0xd2, 0xb2, 0xfd, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x43, 0xdd, 0x05, 0x5a, 0x18, 0x12,
-	0x00, 0x00,
+	// 1391 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x98, 0x5f, 0x6f, 0xd3, 0xd6,
+	0x1b, 0xc7, 0x6b, 0x7e, 0xb4, 0x85, 0x07, 0xf8, 0x01, 0xa7, 0x81, 0xb5, 0x6e, 0x93, 0x14, 0x97,
+	0x41, 0xd3, 0x8e, 0x38, 0x29, 0x7f, 0x24, 0xa4, 0xdd, 0x90, 0x52, 0xa4, 0x31, 0xd8, 0x58, 0xd6,
+	0x6d, 0x1a, 0x62, 0x8a, 0x1c, 0xe7, 0x60, 0x2c, 0x39, 0x3e, 0xc1, 0x76, 0xaa, 0x56, 0x08, 0x69,
+	0xda, 0x0b, 0xd8, 0x98, 0xb6, 0xab, 0x5d, 0xee, 0x8a, 0xcb, 0xed, 0x5d, 0x70, 0x89, 0xb4, 0x9b,
+	0x5d, 0x4d, 0x13, 0xec, 0x85, 0x4c, 0x3e, 0x7e, 0xec, 0xc4, 0x3e, 0xc7, 0x4e, 0x8a, 0x76, 0x45,
+	0xfd, 0xf8, 0x79, 0x9e, 0xef, 0xe7, 0xf8, 0xfc, 0xfb, 0x12, 0x28, 0x0d, 0xa8, 0x65, 0x1d, 0xe8,
+	0x7b, 0x4d, 0xfd, 0xe9, 0x90, 0x7a, 0x07, 0xf5, 0x81, 0xc7, 0x02, 0x46, 0x8e, 0xf1, 0x68, 0x7d,
+	0xaf, 0xa9, 0x9e, 0x4f, 0xde, 0x5b, 0xd4, 0xa5, 0xbe, 0xed, 0x47, 0x19, 0xea, 0xa8, 0x2e, 0x38,
+	0x18, 0xd0, 0x38, 0xba, 0x90, 0x44, 0xfb, 0xbe, 0x25, 0x06, 0x07, 0x8c, 0x39, 0x42, 0x7d, 0xd7,
+	0x08, 0xcc, 0x27, 0x18, 0x5d, 0xb1, 0x18, 0xb3, 0x1c, 0xaa, 0x1b, 0x03, 0x5b, 0x37, 0x5c, 0x97,
+	0x05, 0x46, 0x60, 0x33, 0x37, 0xd1, 0xb4, 0x98, 0xc5, 0xf8, 0x9f, 0x7a, 0xf8, 0x57, 0x14, 0xd5,
+	0x4a, 0x40, 0x3e, 0x0b, 0xd1, 0x1f, 0x18, 0x9e, 0xd1, 0xf7, 0xdb, 0xf4, 0xe9, 0x90, 0xfa, 0x81,
+	0xb6, 0x03, 0x0b, 0xa9, 0xa8, 0x3f, 0x60, 0xae, 0x4f, 0x49, 0x1d, 0xe6, 0x06, 0x3c, 0xb2, 0xa8,
+	0xac, 0x2a, 0xeb, 0x27, 0xb6, 0xce, 0xd4, 0xe3, 0x91, 0xd6, 0xa3, 0xcc, 0xd6, 0xd1, 0x57, 0x7f,
+	0x55, 0x67, 0xda, 0x98, 0xa5, 0x2d, 0xc3, 0x12, 0x6f, 0xb3, 0x3d, 0xf4, 0x3c, 0xea, 0x06, 0x5f,
+	0x1a, 0x8e, 0x4f, 0x83, 0x58, 0xe3, 0x0e, 0xa8, 0xb2, 0x97, 0x28, 0xb5, 0x0e, 0x73, 0x7b, 0x3c,
+	0x22, 0x4a, 0x61, 0x26, 0xbe, 0xd7, 0x9a, 0x28, 0x92, 0xea, 0x8e, 0xff, 0x90, 0x12, 0xcc, 0xba,
+	0xcc, 0x35, 0x29, 0xef, 0x72, 0xb4, 0x1d, 0x3d, 0x24, 0xd2, 0x99, 0x92, 0x43, 0x4b, 0x7f, 0x9c,
+	0x92, 0xde, 0x66, 0xee, 0x63, 0xdb, 0xeb, 0x17, 0x4a, 0x93, 0x45, 0x98, 0x37, 0x7a, 0x3d, 0x8f,
+	0xfa, 0xfe, 0xe2, 0x91, 0x55, 0x65, 0xfd, 0x78, 0x3b, 0x7e, 0xd4, 0xda, 0x29, 0xa8, 0xa4, 0x19,
+	0x42, 0x5d, 0x83, 0x79, 0x33, 0x0a, 0x21, 0x95, 0x3a, 0xa2, 0xba, 0xef, 0x5b, 0xe9, 0xa2, 0x38,
+	0x55, 0xbb, 0x09, 0x17, 0xc4, 0x9e, 0x7e, 0xeb, 0xe0, 0x93, 0x90, 0xa5, 0xf8, 0x1b, 0x3d, 0x02,
+	0xad, 0xa8, 0x14, 0xb1, 0x6e, 0xc0, 0x31, 0xd4, 0x0a, 0xd7, 0xc4, 0xff, 0x26, 0x70, 0x25, 0xb9,
+	0xda, 0x2a, 0x54, 0x78, 0xf7, 0x7b, 0x86, 0x9f, 0x5e, 0x16, 0xc9, 0x12, 0xbc, 0x0f, 0xd5, 0xdc,
+	0x0c, 0x14, 0xdf, 0x80, 0xf9, 0x68, 0x22, 0x62, 0x6d, 0x71, 0xa6, 0xe2, 0x04, 0xed, 0x0e, 0x6c,
+	0x24, 0xed, 0x1e, 0x50, 0xb7, 0x67, 0xbb, 0x56, 0xaa, 0x6b, 0xeb, 0xe0, 0x56, 0xaf, 0xe7, 0xc5,
+	0x9f, 0x64, 0x6c, 0x96, 0x94, 0xf4, 0x2c, 0x7d, 0x0d, 0x9b, 0x53, 0xf5, 0x79, 0x07, 0xc4, 0xf3,
+	0x50, 0xe2, 0xad, 0x5b, 0xe1, 0x96, 0xbe, 0x43, 0xe3, 0xf9, 0xd1, 0xee, 0xc2, 0xb9, 0x4c, 0x1c,
+	0x9b, 0x37, 0xe1, 0x78, 0x17, 0x63, 0x71, 0xfb, 0x85, 0x51, 0xfb, 0x38, 0xdd, 0x6f, 0x8f, 0xb2,
+	0xb4, 0x1d, 0xa8, 0x65, 0xf1, 0x79, 0xde, 0x21, 0xbf, 0xc2, 0x37, 0xe2, 0xd7, 0x94, 0xb5, 0x41,
+	0x4e, 0x1d, 0x66, 0x39, 0x01, 0xae, 0xdc, 0xa5, 0x11, 0xe3, 0xa7, 0xc3, 0xc0, 0x62, 0xb6, 0x6b,
+	0xed, 0xee, 0x47, 0xe5, 0x51, 0x9e, 0xd6, 0x82, 0x4b, 0xd9, 0xf6, 0xf7, 0x98, 0x65, 0x9b, 0xdb,
+	0x86, 0xe3, 0x4c, 0x8b, 0xf8, 0x10, 0x2e, 0x4f, 0xec, 0x91, 0xf0, 0x1d, 0x35, 0x0d, 0xc7, 0x41,
+	0xbc, 0x65, 0x11, 0x2f, 0x29, 0x6c, 0xf3, 0x44, 0xad, 0x0a, 0x65, 0xde, 0x3b, 0x83, 0x4f, 0x93,
+	0xc5, 0xfb, 0x05, 0x2e, 0x6f, 0x49, 0x02, 0x6a, 0x5e, 0x85, 0xf9, 0x6e, 0x14, 0xc2, 0x99, 0x2b,
+	0xf8, 0x2a, 0x71, 0x66, 0xb2, 0x6b, 0x04, 0xae, 0x44, 0x78, 0x17, 0x77, 0x8d, 0x2c, 0x23, 0x59,
+	0x35, 0xb3, 0xe1, 0x20, 0x62, 0xdd, 0xc2, 0xe1, 0x46, 0x99, 0x5a, 0x17, 0xbb, 0xa6, 0xe7, 0x78,
+	0xf2, 0x21, 0x42, 0x6a, 0x70, 0xc6, 0x64, 0x6e, 0xe0, 0x19, 0x66, 0xd0, 0x49, 0x1f, 0x7b, 0xa7,
+	0xe3, 0xf8, 0x2d, 0x9c, 0xaf, 0xcf, 0x61, 0x35, 0x5f, 0xe3, 0x5d, 0x17, 0xd2, 0x23, 0x3c, 0xa0,
+	0x79, 0x30, 0x3e, 0xc3, 0xfe, 0x43, 0x64, 0x55, 0xd6, 0x1d, 0x61, 0xaf, 0x0b, 0x47, 0xe3, 0x52,
+	0xea, 0x68, 0xc4, 0x82, 0x88, 0x77, 0x74, 0x32, 0xfa, 0x88, 0x1c, 0x4d, 0x42, 0x06, 0xf9, 0x32,
+	0x9c, 0xb6, 0xdd, 0x3d, 0xc3, 0xb1, 0x7b, 0xfc, 0x6a, 0xef, 0xd8, 0x3d, 0x0e, 0x7f, 0xb2, 0xfd,
+	0xff, 0xf1, 0xf0, 0x47, 0x3d, 0x72, 0x05, 0x48, 0x2a, 0x31, 0x1a, 0xe8, 0x11, 0x3e, 0xd0, 0xb3,
+	0xe3, 0x6f, 0xf8, 0x07, 0xd6, 0xbe, 0xc2, 0x91, 0x64, 0x44, 0x71, 0x24, 0x37, 0x85, 0x91, 0x94,
+	0x65, 0x23, 0x19, 0x2d, 0x9b, 0xd1, 0x68, 0x3e, 0xc4, 0x59, 0x0d, 0x77, 0xe1, 0xce, 0x1e, 0x75,
+	0x03, 0xae, 0x37, 0xed, 0x1e, 0xbe, 0x8d, 0xd7, 0x97, 0xbc, 0x1a, 0xe9, 0xaa, 0x70, 0x82, 0x86,
+	0xef, 0x3a, 0xe3, 0x93, 0x09, 0x34, 0x49, 0xd7, 0x1a, 0xb0, 0xc8, 0xbb, 0xec, 0xb4, 0xb7, 0xb7,
+	0x1a, 0xbb, 0xec, 0x36, 0x75, 0xd9, 0xf8, 0x25, 0x4d, 0x3d, 0x73, 0xab, 0x81, 0xca, 0xd1, 0x43,
+	0x62, 0x29, 0xd2, 0x15, 0xa8, 0x57, 0x82, 0xd9, 0x5e, 0x18, 0x88, 0x4b, 0xf8, 0x43, 0x22, 0xc2,
+	0x73, 0x77, 0x19, 0xaf, 0x1c, 0x13, 0x91, 0x54, 0xc4, 0x22, 0xe9, 0x8a, 0x91, 0x88, 0xc8, 0xb5,
+	0xf5, 0xb2, 0x04, 0xb3, 0xbc, 0x86, 0x98, 0x30, 0x17, 0x39, 0x2e, 0xb2, 0x32, 0x9a, 0x0a, 0xd1,
+	0xc8, 0xa9, 0xe5, 0x9c, 0xb7, 0x91, 0x8c, 0xb6, 0xf2, 0xdd, 0x1f, 0xff, 0xfc, 0x74, 0xe4, 0x3c,
+	0x29, 0xe9, 0xb1, 0xa1, 0xec, 0xd2, 0xc0, 0xd0, 0x23, 0xfb, 0x46, 0xbe, 0x55, 0xe0, 0x54, 0xca,
+	0x9d, 0x91, 0xb5, 0x4c, 0x3b, 0x99, 0xb1, 0x53, 0x2f, 0x16, 0x27, 0xa1, 0xf4, 0x45, 0x2e, 0x5d,
+	0x21, 0x2b, 0x69, 0xe9, 0xe8, 0x32, 0xd4, 0xcd, 0xa8, 0x86, 0xec, 0xc3, 0xa9, 0x54, 0x73, 0x81,
+	0x40, 0xe6, 0xfa, 0x04, 0x02, 0xa9, 0xcf, 0xcb, 0x1b, 0x7c, 0x44, 0xc0, 0x07, 0x9f, 0x72, 0x2f,
+	0x39, 0xd2, 0x69, 0xd7, 0x97, 0x23, 0x9d, 0x71, 0x73, 0x93, 0x06, 0x8f, 0x82, 0xbf, 0x28, 0x70,
+	0x4e, 0x6a, 0xbf, 0xc8, 0x66, 0x91, 0x4a, 0xc6, 0xdf, 0xa9, 0x1f, 0x4c, 0x97, 0x8c, 0x68, 0x97,
+	0x38, 0xda, 0x2a, 0xa9, 0xa4, 0xd1, 0xe2, 0x1d, 0xad, 0x3f, 0xe3, 0xdb, 0xec, 0x39, 0x79, 0xa1,
+	0x00, 0x11, 0xbd, 0x19, 0x59, 0xcf, 0x88, 0xe5, 0x1a, 0x3c, 0xb5, 0x36, 0x45, 0x26, 0x32, 0xbd,
+	0xcf, 0x99, 0xaa, 0xa4, 0x2c, 0xfd, 0x5c, 0x5e, 0xac, 0xfd, 0x9b, 0x02, 0x95, 0x62, 0x5f, 0x46,
+	0xae, 0x49, 0x44, 0x27, 0xda, 0x41, 0xf5, 0xfa, 0x21, 0xab, 0x10, 0xfb, 0x02, 0xc7, 0x5e, 0x26,
+	0x4b, 0x52, 0x6c, 0xc7, 0xf0, 0x03, 0xf2, 0xbb, 0x02, 0xe5, 0x42, 0x13, 0x45, 0xae, 0xe6, 0x6b,
+	0xe7, 0x3a, 0x37, 0xf5, 0xda, 0xe1, 0x8a, 0x8a, 0x3f, 0x33, 0xbf, 0x4a, 0xf5, 0x67, 0x78, 0x28,
+	0x3f, 0x27, 0x2f, 0x15, 0x50, 0xf3, 0x5d, 0x15, 0x69, 0xe4, 0x6b, 0xcb, 0x4d, 0x9c, 0xda, 0x3c,
+	0x44, 0x45, 0x31, 0xaa, 0x13, 0xa6, 0x8f, 0xa1, 0xfe, 0xaa, 0x40, 0x49, 0x76, 0x79, 0x90, 0x0d,
+	0x89, 0x64, 0xce, 0xfd, 0xa4, 0x6e, 0x4e, 0x95, 0x8b, 0x60, 0x4d, 0x0e, 0xb6, 0x49, 0x6a, 0x69,
+	0x30, 0xe6, 0x19, 0xa6, 0x43, 0x75, 0x7e, 0x2b, 0xf1, 0x0d, 0x34, 0x06, 0xd9, 0x87, 0xe3, 0x89,
+	0x57, 0x27, 0x95, 0x8c, 0x58, 0xe6, 0x3f, 0x03, 0x6a, 0x35, 0xf7, 0x3d, 0x02, 0x54, 0x39, 0xc0,
+	0x12, 0x79, 0x4f, 0x32, 0x89, 0x8f, 0x43, 0x85, 0xef, 0x15, 0x38, 0x2b, 0xf8, 0x52, 0x72, 0x39,
+	0xd3, 0x37, 0xcf, 0xda, 0xaa, 0xeb, 0x93, 0x13, 0x8b, 0x4f, 0x92, 0x68, 0x39, 0x31, 0x2c, 0x0b,
+	0xf6, 0xc9, 0xcf, 0x0a, 0x10, 0xd1, 0xaf, 0x92, 0x3c, 0x21, 0xc1, 0xf4, 0x0a, 0x27, 0x49, 0xbe,
+	0xf9, 0xd5, 0x6a, 0x9c, 0x69, 0x8d, 0x5c, 0x28, 0x62, 0xe2, 0xab, 0x88, 0xfc, 0xa8, 0xc0, 0x82,
+	0xc4, 0x8c, 0x92, 0x9a, 0x6c, 0x06, 0xa4, 0xa6, 0x58, 0xdd, 0x98, 0x26, 0x15, 0xc9, 0xd6, 0x38,
+	0x59, 0x99, 0x2c, 0x4b, 0x37, 0x1f, 0x1e, 0xba, 0xe1, 0xa5, 0x94, 0x72, 0x9b, 0xc2, 0xa5, 0x24,
+	0x73, 0xba, 0xc2, 0xa5, 0x24, 0x35, 0xac, 0x79, 0x97, 0x52, 0x44, 0x10, 0x9f, 0xff, 0x1c, 0x21,
+	0x65, 0x13, 0x05, 0x04, 0x99, 0x73, 0x15, 0x10, 0xa4, 0x4e, 0x33, 0x0f, 0x21, 0xda, 0xd6, 0x09,
+	0xc2, 0x0f, 0x0a, 0x9c, 0x1c, 0xb7, 0x66, 0x44, 0xcb, 0x34, 0x97, 0x38, 0x3d, 0x75, 0xad, 0x30,
+	0x07, 0xf5, 0x6f, 0x70, 0xfd, 0x06, 0xa9, 0x67, 0x2f, 0x3f, 0xbf, 0xcf, 0xfc, 0x0e, 0xf3, 0x6c,
+	0xcb, 0x76, 0x8d, 0x80, 0xf6, 0x74, 0xee, 0xc7, 0x3a, 0x01, 0xeb, 0x70, 0x2f, 0xc7, 0x89, 0xc6,
+	0x7d, 0x9c, 0x40, 0x24, 0xb1, 0x85, 0x02, 0x91, 0xcc, 0x08, 0x4e, 0x4f, 0xc4, 0x41, 0x42, 0x22,
+	0x8e, 0xd6, 0xba, 0xfb, 0xea, 0x4d, 0x45, 0x79, 0xfd, 0xa6, 0xa2, 0xfc, 0xfd, 0xa6, 0xa2, 0xbc,
+	0x78, 0x5b, 0x99, 0x79, 0xfd, 0xb6, 0x32, 0xf3, 0xe7, 0xdb, 0xca, 0xcc, 0xc3, 0x86, 0x65, 0x07,
+	0x4f, 0x86, 0xdd, 0xba, 0xc9, 0xfa, 0xba, 0xe1, 0x04, 0x4f, 0xa8, 0x71, 0xc5, 0xa5, 0x01, 0xb6,
+	0xef, 0xb3, 0xde, 0xd0, 0xa1, 0xfa, 0x3e, 0x3e, 0xf2, 0x5f, 0x27, 0xbb, 0x73, 0xfc, 0xa7, 0xc2,
+	0xab, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x48, 0x6a, 0x57, 0x41, 0xee, 0x14, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1499,11 +1772,14 @@ type QueryClient interface {
 	LastPendingBatchRequestByAddr(ctx context.Context, in *QueryLastPendingBatchRequestByAddrRequest, opts ...grpc.CallOption) (*QueryLastPendingBatchRequestByAddrResponse, error)
 	LastPendingLogicCallByAddr(ctx context.Context, in *QueryLastPendingLogicCallByAddrRequest, opts ...grpc.CallOption) (*QueryLastPendingLogicCallByAddrResponse, error)
 	LastEventNonceByAddr(ctx context.Context, in *QueryLastEventNonceByAddrRequest, opts ...grpc.CallOption) (*QueryLastEventNonceByAddrResponse, error)
+	BatchFees(ctx context.Context, in *QueryBatchFeeRequest, opts ...grpc.CallOption) (*QueryBatchFeeResponse, error)
 	OutgoingTxBatches(ctx context.Context, in *QueryOutgoingTxBatchesRequest, opts ...grpc.CallOption) (*QueryOutgoingTxBatchesResponse, error)
 	OutgoingLogicCalls(ctx context.Context, in *QueryOutgoingLogicCallsRequest, opts ...grpc.CallOption) (*QueryOutgoingLogicCallsResponse, error)
 	BatchRequestByNonce(ctx context.Context, in *QueryBatchRequestByNonceRequest, opts ...grpc.CallOption) (*QueryBatchRequestByNonceResponse, error)
 	BatchConfirms(ctx context.Context, in *QueryBatchConfirmsRequest, opts ...grpc.CallOption) (*QueryBatchConfirmsResponse, error)
 	LogicConfirms(ctx context.Context, in *QueryLogicConfirmsRequest, opts ...grpc.CallOption) (*QueryLogicConfirmsResponse, error)
+	ERC20ToDenom(ctx context.Context, in *QueryERC20ToDenomRequest, opts ...grpc.CallOption) (*QueryERC20ToDenomResponse, error)
+	DenomToERC20(ctx context.Context, in *QueryDenomToERC20Request, opts ...grpc.CallOption) (*QueryDenomToERC20Response, error)
 }
 
 type queryClient struct {
@@ -1604,6 +1880,15 @@ func (c *queryClient) LastEventNonceByAddr(ctx context.Context, in *QueryLastEve
 	return out, nil
 }
 
+func (c *queryClient) BatchFees(ctx context.Context, in *QueryBatchFeeRequest, opts ...grpc.CallOption) (*QueryBatchFeeResponse, error) {
+	out := new(QueryBatchFeeResponse)
+	err := c.cc.Invoke(ctx, "/peggy.v1.Query/BatchFees", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) OutgoingTxBatches(ctx context.Context, in *QueryOutgoingTxBatchesRequest, opts ...grpc.CallOption) (*QueryOutgoingTxBatchesResponse, error) {
 	out := new(QueryOutgoingTxBatchesResponse)
 	err := c.cc.Invoke(ctx, "/peggy.v1.Query/OutgoingTxBatches", in, out, opts...)
@@ -1649,6 +1934,24 @@ func (c *queryClient) LogicConfirms(ctx context.Context, in *QueryLogicConfirmsR
 	return out, nil
 }
 
+func (c *queryClient) ERC20ToDenom(ctx context.Context, in *QueryERC20ToDenomRequest, opts ...grpc.CallOption) (*QueryERC20ToDenomResponse, error) {
+	out := new(QueryERC20ToDenomResponse)
+	err := c.cc.Invoke(ctx, "/peggy.v1.Query/ERC20ToDenom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) DenomToERC20(ctx context.Context, in *QueryDenomToERC20Request, opts ...grpc.CallOption) (*QueryDenomToERC20Response, error) {
+	out := new(QueryDenomToERC20Response)
+	err := c.cc.Invoke(ctx, "/peggy.v1.Query/DenomToERC20", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Deployments queries deployments
@@ -1662,11 +1965,14 @@ type QueryServer interface {
 	LastPendingBatchRequestByAddr(context.Context, *QueryLastPendingBatchRequestByAddrRequest) (*QueryLastPendingBatchRequestByAddrResponse, error)
 	LastPendingLogicCallByAddr(context.Context, *QueryLastPendingLogicCallByAddrRequest) (*QueryLastPendingLogicCallByAddrResponse, error)
 	LastEventNonceByAddr(context.Context, *QueryLastEventNonceByAddrRequest) (*QueryLastEventNonceByAddrResponse, error)
+	BatchFees(context.Context, *QueryBatchFeeRequest) (*QueryBatchFeeResponse, error)
 	OutgoingTxBatches(context.Context, *QueryOutgoingTxBatchesRequest) (*QueryOutgoingTxBatchesResponse, error)
 	OutgoingLogicCalls(context.Context, *QueryOutgoingLogicCallsRequest) (*QueryOutgoingLogicCallsResponse, error)
 	BatchRequestByNonce(context.Context, *QueryBatchRequestByNonceRequest) (*QueryBatchRequestByNonceResponse, error)
 	BatchConfirms(context.Context, *QueryBatchConfirmsRequest) (*QueryBatchConfirmsResponse, error)
 	LogicConfirms(context.Context, *QueryLogicConfirmsRequest) (*QueryLogicConfirmsResponse, error)
+	ERC20ToDenom(context.Context, *QueryERC20ToDenomRequest) (*QueryERC20ToDenomResponse, error)
+	DenomToERC20(context.Context, *QueryDenomToERC20Request) (*QueryDenomToERC20Response, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -1703,6 +2009,9 @@ func (*UnimplementedQueryServer) LastPendingLogicCallByAddr(ctx context.Context,
 func (*UnimplementedQueryServer) LastEventNonceByAddr(ctx context.Context, req *QueryLastEventNonceByAddrRequest) (*QueryLastEventNonceByAddrResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LastEventNonceByAddr not implemented")
 }
+func (*UnimplementedQueryServer) BatchFees(ctx context.Context, req *QueryBatchFeeRequest) (*QueryBatchFeeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchFees not implemented")
+}
 func (*UnimplementedQueryServer) OutgoingTxBatches(ctx context.Context, req *QueryOutgoingTxBatchesRequest) (*QueryOutgoingTxBatchesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OutgoingTxBatches not implemented")
 }
@@ -1717,6 +2026,12 @@ func (*UnimplementedQueryServer) BatchConfirms(ctx context.Context, req *QueryBa
 }
 func (*UnimplementedQueryServer) LogicConfirms(ctx context.Context, req *QueryLogicConfirmsRequest) (*QueryLogicConfirmsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LogicConfirms not implemented")
+}
+func (*UnimplementedQueryServer) ERC20ToDenom(ctx context.Context, req *QueryERC20ToDenomRequest) (*QueryERC20ToDenomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ERC20ToDenom not implemented")
+}
+func (*UnimplementedQueryServer) DenomToERC20(ctx context.Context, req *QueryDenomToERC20Request) (*QueryDenomToERC20Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DenomToERC20 not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -1903,6 +2218,24 @@ func _Query_LastEventNonceByAddr_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_BatchFees_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBatchFeeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).BatchFees(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/peggy.v1.Query/BatchFees",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).BatchFees(ctx, req.(*QueryBatchFeeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_OutgoingTxBatches_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryOutgoingTxBatchesRequest)
 	if err := dec(in); err != nil {
@@ -1993,6 +2326,42 @@ func _Query_LogicConfirms_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ERC20ToDenom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryERC20ToDenomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ERC20ToDenom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/peggy.v1.Query/ERC20ToDenom",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ERC20ToDenom(ctx, req.(*QueryERC20ToDenomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_DenomToERC20_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDenomToERC20Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DenomToERC20(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/peggy.v1.Query/DenomToERC20",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DenomToERC20(ctx, req.(*QueryDenomToERC20Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "peggy.v1.Query",
 	HandlerType: (*QueryServer)(nil),
@@ -2038,6 +2407,10 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_LastEventNonceByAddr_Handler,
 		},
 		{
+			MethodName: "BatchFees",
+			Handler:    _Query_BatchFees_Handler,
+		},
+		{
 			MethodName: "OutgoingTxBatches",
 			Handler:    _Query_OutgoingTxBatches_Handler,
 		},
@@ -2056,6 +2429,14 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LogicConfirms",
 			Handler:    _Query_LogicConfirms_Handler,
+		},
+		{
+			MethodName: "ERC20ToDenom",
+			Handler:    _Query_ERC20ToDenom_Handler,
+		},
+		{
+			MethodName: "DenomToERC20",
+			Handler:    _Query_DenomToERC20_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -2488,6 +2869,66 @@ func (m *QueryLastPendingValsetRequestByAddrResponse) MarshalToSizedBuffer(dAtA 
 		for iNdEx := len(m.Valsets) - 1; iNdEx >= 0; iNdEx-- {
 			{
 				size, err := m.Valsets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryBatchFeeRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryBatchFeeRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryBatchFeeRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryBatchFeeResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryBatchFeeResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryBatchFeeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.BatchFees) > 0 {
+		for iNdEx := len(m.BatchFees) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.BatchFees[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -3023,6 +3464,126 @@ func (m *QueryLastEventNonceByAddrResponse) MarshalToSizedBuffer(dAtA []byte) (i
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryERC20ToDenomRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryERC20ToDenomRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryERC20ToDenomRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Erc20) > 0 {
+		i -= len(m.Erc20)
+		copy(dAtA[i:], m.Erc20)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Erc20)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryERC20ToDenomResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryERC20ToDenomResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryERC20ToDenomResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Denom) > 0 {
+		i -= len(m.Denom)
+		copy(dAtA[i:], m.Denom)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Denom)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryDenomToERC20Request) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryDenomToERC20Request) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryDenomToERC20Request) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Denom) > 0 {
+		i -= len(m.Denom)
+		copy(dAtA[i:], m.Denom)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Denom)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryDenomToERC20Response) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryDenomToERC20Response) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryDenomToERC20Response) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Erc20) > 0 {
+		i -= len(m.Erc20)
+		copy(dAtA[i:], m.Erc20)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Erc20)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -3202,6 +3763,30 @@ func (m *QueryLastPendingValsetRequestByAddrResponse) Size() (n int) {
 	_ = l
 	if len(m.Valsets) > 0 {
 		for _, e := range m.Valsets {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryBatchFeeRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *QueryBatchFeeResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.BatchFees) > 0 {
+		for _, e := range m.BatchFees {
 			l = e.Size()
 			n += 1 + l + sovQuery(uint64(l))
 		}
@@ -3421,6 +4006,58 @@ func (m *QueryLastEventNonceByAddrResponse) Size() (n int) {
 	_ = l
 	if m.EventNonce != 0 {
 		n += 1 + sovQuery(uint64(m.EventNonce))
+	}
+	return n
+}
+
+func (m *QueryERC20ToDenomRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Erc20)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryERC20ToDenomResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Denom)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryDenomToERC20Request) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Denom)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryDenomToERC20Response) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Erc20)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
@@ -4510,6 +5147,146 @@ func (m *QueryLastPendingValsetRequestByAddrResponse) Unmarshal(dAtA []byte) err
 			}
 			m.Valsets = append(m.Valsets, &Valset{})
 			if err := m.Valsets[len(m.Valsets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryBatchFeeRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryBatchFeeRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryBatchFeeRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryBatchFeeResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryBatchFeeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryBatchFeeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BatchFees", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BatchFees = append(m.BatchFees, &BatchFees{})
+			if err := m.BatchFees[len(m.BatchFees)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5875,6 +6652,346 @@ func (m *QueryLastEventNonceByAddrResponse) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryERC20ToDenomRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryERC20ToDenomRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryERC20ToDenomRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Erc20", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Erc20 = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryERC20ToDenomResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryERC20ToDenomResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryERC20ToDenomResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Denom = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryDenomToERC20Request) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryDenomToERC20Request: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryDenomToERC20Request: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Denom = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryDenomToERC20Response) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryDenomToERC20Response: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryDenomToERC20Response: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Erc20", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Erc20 = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
