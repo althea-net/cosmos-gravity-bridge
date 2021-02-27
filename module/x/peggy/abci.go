@@ -210,7 +210,7 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, curre
 			}
 
 			// Don't slash validators who are unbonded and UNBOND_SLASHING_WINDOW has passed
-			if val.UnbondingHeight > 0 && vs.Nonce > uint64(val.UnbondingHeight)+params.UnbondSlashingWindow {
+			if val.UnbondingHeight > 0 && vs.Nonce > uint64(val.UnbondingHeight)+params.UnbondSlashingValsetsWindow {
 				continue
 			}
 
@@ -271,7 +271,7 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, curren
 			}
 
 			// Don't slash validators who are unbonded and UNBOND_SLASHING_WINDOW has passed
-			if val.UnbondingHeight > 0 && batch.Block > uint64(val.UnbondingHeight)+params.UnbondSlashingWindow {
+			if val.UnbondingHeight > 0 && batch.Block > uint64(val.UnbondingHeight)+params.UnbondSlashingBatchWindow {
 				continue
 			}
 
