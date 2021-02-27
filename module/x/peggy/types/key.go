@@ -102,6 +102,9 @@ var (
 
 	// LatestValsetNonce indexes the latest valset nonce
 	LatestValsetNonce = []byte{0xf6}
+
+	// LastSlashedBatchBlock indexes the latest slashed batch block height
+	LastSlashedBatchBlock = []byte{0xf7}
 )
 
 // GetOrchestratorAddressKey returns the following key format

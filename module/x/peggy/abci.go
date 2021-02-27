@@ -6,6 +6,7 @@ import (
 	"github.com/althea-net/peggy/module/x/peggy/keeper"
 	"github.com/althea-net/peggy/module/x/peggy/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // EndBlocker is called at the end of every block
@@ -21,98 +22,9 @@ func slashing(ctx sdk.Context, k keeper.Keeper) {
 	params := k.GetParams(ctx)
 	currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 
-	maxHeight := uint64(0)
-
-	// don't slash in the beginning before there aren't even SignedValsetsWindow blocks yet
-	if uint64(ctx.BlockHeight()) > params.SignedValsetsWindow {
-		maxHeight = uint64(ctx.BlockHeight()) - params.SignedValsetsWindow
-	}
-
-	unslashedValsets := k.GetUnSlashedValsets(ctx, maxHeight)
-
-	// unslashedValsets are sorted by nonce in ASC order
-	for _, vs := range unslashedValsets {
-		// #1 condition
-		// We look through the full bonded validator set (not just the active set, include unbonding validators)
-		// and we slash users who haven't signed a valset that is currentHeight - signedBlocksWindow old
-
-		// first we need to see which validators in the active set
-		// haven't signed the valdiator set and slash them,
-		confirms := k.GetValsetConfirms(ctx, vs.Nonce)
-		for _, val := range currentBondedSet {
-
-			// Don't slash validators who joined after valset is created
-			consAddr, _ := val.GetConsAddr()
-			valSigningInfo, exist := k.SlashingKeeper.GetValidatorSigningInfo(ctx, consAddr)
-			if exist && valSigningInfo.StartHeight > int64(vs.Nonce) {
-				continue
-			}
-
-			// Don't slash validators who are unbonded and UNBOND_SLASHING_WINDOW has passed
-			if val.UnbondingHeight > 0 && vs.Nonce > uint64(val.UnbondingHeight)+params.UnbondSlashingWindow {
-				continue
-			}
-
-			// Check if validator has confirmed valset or not
-			found := false
-			for _, conf := range confirms {
-				if conf.EthAddress == k.GetEthAddress(ctx, val.GetOperator()) {
-					found = true
-					break
-				}
-			}
-
-			if !found {
-				// slash validators for not confirming valsets
-				cons, _ := val.GetConsAddr()
-				k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), val.ConsensusPower(), params.SlashFractionValset)
-				k.StakingKeeper.Jail(ctx, cons)
-
-			}
-		}
-
-		// then we set the latest slashed valset  nonce
-		k.SetLastSlashedValsetNonce(ctx, vs.Nonce)
-	}
-
-	// on the latest validator set, check for change in power against
-	// current, and emit a new validator set if the change in power >5%
-	latestValset := k.GetLatestValset(ctx)
-	if latestValset == nil {
-		k.SetValsetRequest(ctx)
-	} else if types.BridgeValidators(k.GetCurrentValset(ctx).Members).PowerDiff(latestValset.Members) > 0.05 {
-		k.SetValsetRequest(ctx)
-	}
-
-	// #2 condition
-	// We look through the full bonded set (not just the active set, include unbonding validators)
-	// and we slash users who haven't signed a batch confirmation that is >15hrs in blocks old
-	batches := k.GetOutgoingTxBatches(ctx)
-	for _, batch := range batches {
-		signedWithinWindow := uint64(ctx.BlockHeight()) > params.SignedBatchesWindow && uint64(ctx.BlockHeight())-params.SignedBatchesWindow > batch.Block
-		if signedWithinWindow {
-			confirms := k.GetBatchConfirmByNonceAndTokenContract(ctx, batch.BatchNonce, batch.TokenContract)
-			for _, val := range currentBondedSet {
-				found := false
-				for _, conf := range confirms {
-					// TODO: double check this logic
-					confVal, _ := sdk.AccAddressFromBech32(conf.Orchestrator)
-					if k.GetOrchestratorValidator(ctx, confVal).Equals(val.GetOperator()) {
-						found = true
-						break
-					}
-				}
-				if !found {
-					cons, _ := val.GetConsAddr()
-					k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), val.ConsensusPower(), params.SlashFractionBatch)
-					k.StakingKeeper.Jail(ctx, cons)
-				}
-			}
-
-			// clean up batches here
-			k.DeleteBatch(ctx, *batch)
-		}
-	}
+	// Slash validator for not attesting valset requests, batch requests
+	ValsetSlashing(ctx, k, params, currentBondedSet)
+	BatchSlashing(ctx, k, params, currentBondedSet)
 
 	// #3 condition
 	// Oracle events MsgDepositClaim, MsgWithdrawClaim
@@ -271,5 +183,116 @@ func cleanupTimedOutLogicCalls(ctx sdk.Context, k keeper.Keeper) {
 		if call.Timeout < ethereumHeight {
 			k.CancelOutgoingLogicCall(ctx, call.InvalidationId, call.InvalidationNonce)
 		}
+	}
+}
+
+func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, currentBondedSet []stakingtypes.Validator) {
+
+	maxHeight := uint64(0)
+
+	// don't slash in the beginning before there aren't even SignedValsetsWindow blocks yet
+	if uint64(ctx.BlockHeight()) > params.SignedValsetsWindow {
+		maxHeight = uint64(ctx.BlockHeight()) - params.SignedValsetsWindow
+	}
+
+	unslashedValsets := k.GetUnSlashedValsets(ctx, maxHeight)
+
+	// unslashedValsets are sorted by nonce in ASC order
+	for _, vs := range unslashedValsets {
+		confirms := k.GetValsetConfirms(ctx, vs.Nonce)
+		for _, val := range currentBondedSet {
+
+			// Don't slash validators who joined after valset is created
+			consAddr, _ := val.GetConsAddr()
+			valSigningInfo, exist := k.SlashingKeeper.GetValidatorSigningInfo(ctx, consAddr)
+			if exist && valSigningInfo.StartHeight > int64(vs.Nonce) {
+				continue
+			}
+
+			// Don't slash validators who are unbonded and UNBOND_SLASHING_WINDOW has passed
+			if val.UnbondingHeight > 0 && vs.Nonce > uint64(val.UnbondingHeight)+params.UnbondSlashingWindow {
+				continue
+			}
+
+			// Check if validator has confirmed valset or not
+			found := false
+			for _, conf := range confirms {
+				if conf.EthAddress == k.GetEthAddress(ctx, val.GetOperator()) {
+					found = true
+					break
+				}
+			}
+
+			// slash validators for not confirming valsets
+			if !found {
+				cons, _ := val.GetConsAddr()
+				k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), val.ConsensusPower(), params.SlashFractionValset)
+				k.StakingKeeper.Jail(ctx, cons)
+
+			}
+		}
+
+		// then we set the latest slashed valset  nonce
+		k.SetLastSlashedValsetNonce(ctx, vs.Nonce)
+	}
+
+	// on the latest validator set, check for change in power against
+	// current, and emit a new validator set if the change in power >5%
+	latestValset := k.GetLatestValset(ctx)
+	if latestValset == nil {
+		k.SetValsetRequest(ctx)
+	} else if types.BridgeValidators(k.GetCurrentValset(ctx).Members).PowerDiff(latestValset.Members) > 0.05 {
+		k.SetValsetRequest(ctx)
+	}
+}
+
+func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, currentBondedSet []stakingtypes.Validator) {
+
+	// #2 condition
+	// We look through the full bonded set (not just the active set, include unbonding validators)
+	// and we slash users who haven't signed a batch confirmation that is >15hrs in blocks old
+	maxHeight := uint64(0)
+
+	// don't slash in the beginning before there aren't even SignedBatchesWindow blocks yet
+	if uint64(ctx.BlockHeight()) > params.SignedBatchesWindow {
+		maxHeight = uint64(ctx.BlockHeight()) - params.SignedBatchesWindow
+	}
+
+	unslashedBatches := k.GetUnSlashedBatches(ctx, maxHeight)
+	for _, batch := range unslashedBatches {
+
+		confirms := k.GetBatchConfirmByNonceAndTokenContract(ctx, batch.BatchNonce, batch.TokenContract)
+		for _, val := range currentBondedSet {
+			// Don't slash validators who joined after batch is created
+			consAddr, _ := val.GetConsAddr()
+			valSigningInfo, exist := k.SlashingKeeper.GetValidatorSigningInfo(ctx, consAddr)
+			if exist && valSigningInfo.StartHeight > int64(batch.Block) {
+				continue
+			}
+
+			// Don't slash validators who are unbonded and UNBOND_SLASHING_WINDOW has passed
+			if val.UnbondingHeight > 0 && batch.Block > uint64(val.UnbondingHeight)+params.UnbondSlashingWindow {
+				continue
+			}
+
+			found := false
+			for _, conf := range confirms {
+				// TODO: double check this logic
+				confVal, _ := sdk.AccAddressFromBech32(conf.Orchestrator)
+				if k.GetOrchestratorValidator(ctx, confVal).Equals(val.GetOperator()) {
+					found = true
+					break
+				}
+			}
+			if !found {
+				cons, _ := val.GetConsAddr()
+				k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), val.ConsensusPower(), params.SlashFractionBatch)
+				k.StakingKeeper.Jail(ctx, cons)
+			}
+		}
+
+		// then we set the latest slashed batch block
+		k.SetLastSlashedBatchBlock(ctx, batch.Block)
+
 	}
 }

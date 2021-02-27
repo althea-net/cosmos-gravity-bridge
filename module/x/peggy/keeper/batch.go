@@ -201,3 +201,48 @@ func (k Keeper) GetOutgoingTxBatches(ctx sdk.Context) (out []*types.OutgoingTxBa
 	})
 	return
 }
+
+// SetLastSlashedBatchBlock sets the latest slashed Batch block height
+func (k Keeper) SetLastSlashedBatchBlock(ctx sdk.Context, blockHeight uint64) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.LastSlashedBatchBlock, types.UInt64Bytes(blockHeight))
+}
+
+// GetLastSlashedBatchBlock returns the latest slashed Batch block
+func (k Keeper) GetLastSlashedBatchBlock(ctx sdk.Context) uint64 {
+	store := ctx.KVStore(k.storeKey)
+	bytes := store.Get(types.LastSlashedBatchBlock)
+
+	if len(bytes) == 0 {
+		return 0
+	}
+	return types.UInt64FromBytes(bytes)
+}
+
+// GetUnSlashedBatches returns all the unslashed batches in state
+func (k Keeper) GetUnSlashedBatches(ctx sdk.Context, maxHeight uint64) (out []*types.OutgoingTxBatch) {
+	lastSlashedBatchBlock := k.GetLastSlashedBatchBlock(ctx)
+	k.IterateBatchBySlashedBatchBlock(ctx, lastSlashedBatchBlock, maxHeight, func(_ []byte, batch *types.OutgoingTxBatch) bool {
+		if batch.Block > lastSlashedBatchBlock {
+			out = append(out, batch)
+		}
+		return false
+	})
+	return
+}
+
+// IterateBatchBySlashedBatchBlock iterates through all Batch by last slashed Batch block in ASC order
+func (k Keeper) IterateBatchBySlashedBatchBlock(ctx sdk.Context, lastSlashedBatchBlock uint64, maxHeight uint64, cb func([]byte, *types.OutgoingTxBatch) bool) {
+	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.OutgoingTXBatchKey)
+	iter := prefixStore.Iterator(types.UInt64Bytes(lastSlashedBatchBlock), types.UInt64Bytes(maxHeight))
+	defer iter.Close()
+
+	for ; iter.Valid(); iter.Next() {
+		var Batch types.OutgoingTxBatch
+		k.cdc.MustUnmarshalBinaryBare(iter.Value(), &Batch)
+		// cb returns true to stop early
+		if cb(iter.Key(), &Batch) {
+			break
+		}
+	}
+}
