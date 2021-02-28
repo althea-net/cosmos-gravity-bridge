@@ -100,6 +100,9 @@ func (k Keeper) StoreBatch(ctx sdk.Context, batch *types.OutgoingTxBatch) {
 	batch.Block = uint64(ctx.BlockHeight())
 	key := types.GetOutgoingTxBatchKey(batch.TokenContract, batch.BatchNonce)
 	store.Set(key, k.cdc.MustMarshalBinaryBare(batch))
+
+	blockKey := types.GetOutgoingTxBatchBlockKey(batch.Block)
+	store.Set(blockKey, k.cdc.MustMarshalBinaryBare(batch))
 }
 
 // StoreBatchUnsafe stores a transaction batch w/o setting the height
@@ -107,12 +110,16 @@ func (k Keeper) StoreBatchUnsafe(ctx sdk.Context, batch *types.OutgoingTxBatch) 
 	store := ctx.KVStore(k.storeKey)
 	key := types.GetOutgoingTxBatchKey(batch.TokenContract, batch.BatchNonce)
 	store.Set(key, k.cdc.MustMarshalBinaryBare(batch))
+
+	blockKey := types.GetOutgoingTxBatchBlockKey(batch.Block)
+	store.Set(blockKey, k.cdc.MustMarshalBinaryBare(batch))
 }
 
 // DeleteBatch deletes an outgoing transaction batch
 func (k Keeper) DeleteBatch(ctx sdk.Context, batch types.OutgoingTxBatch) {
 	store := ctx.KVStore(k.storeKey)
 	store.Delete(types.GetOutgoingTxBatchKey(batch.TokenContract, batch.BatchNonce))
+	store.Delete(types.GetOutgoingTxBatchBlockKey(batch.Block))
 }
 
 // pickUnbatchedTX find TX in pool and remove from "available" second index
@@ -233,7 +240,7 @@ func (k Keeper) GetUnSlashedBatches(ctx sdk.Context, maxHeight uint64) (out []*t
 
 // IterateBatchBySlashedBatchBlock iterates through all Batch by last slashed Batch block in ASC order
 func (k Keeper) IterateBatchBySlashedBatchBlock(ctx sdk.Context, lastSlashedBatchBlock uint64, maxHeight uint64, cb func([]byte, *types.OutgoingTxBatch) bool) {
-	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.OutgoingTXBatchKey)
+	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.OutgoingTXBatchBlockKey)
 	iter := prefixStore.Iterator(types.UInt64Bytes(lastSlashedBatchBlock), types.UInt64Bytes(maxHeight))
 	defer iter.Close()
 
