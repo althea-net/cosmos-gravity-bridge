@@ -562,6 +562,13 @@ func (k Keeper) setPeggyID(ctx sdk.Context, v string) {
 	k.paramSpace.Set(ctx, types.ParamsStoreKeyPeggyID, v)
 }
 
+// GetInjContractAddress returns the inj erc20 contract address on ETH
+func (k Keeper) GetInjContractAddress(ctx sdk.Context) string {
+	var a string
+	k.paramSpace.Get(ctx, types.ParamsStoreKeyInjContractAddress, &a)
+	return a
+}
+
 // logger returns a module-specific logger.
 func (k Keeper) logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))

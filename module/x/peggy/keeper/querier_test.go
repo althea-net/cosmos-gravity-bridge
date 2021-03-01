@@ -871,3 +871,14 @@ func TestQueryDenomToERC20(t *testing.T) {
 
 	assert.Equal(t, erc20, string(queriedERC20))
 }
+
+func TestQueryInjDenomToERC20(t *testing.T) {
+	input := CreateTestEnv(t)
+	ctx := input.Context
+	injContractAddr := input.PeggyKeeper.GetInjContractAddress(ctx)
+
+	queriedERC20, err := queryDenomToERC20(ctx, "inj", input.PeggyKeeper)
+	require.NoError(t, err)
+
+	assert.Equal(t, injContractAddr, string(queriedERC20))
+}

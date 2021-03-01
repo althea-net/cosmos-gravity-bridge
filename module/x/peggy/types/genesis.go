@@ -37,6 +37,9 @@ var (
 	// ParamsStoreKeyBridgeContractChainID stores the bridge chain id
 	ParamsStoreKeyBridgeContractChainID = []byte("BridgeChainID")
 
+	// ParamsStoreKeyInjContractAddress stores INJ ERC-20 contract address.
+	ParamsStoreKeyInjContractAddress = []byte("InjContractAddress")
+
 	// ParamsStoreKeySignedValsetsWindow stores the signed blocks window
 	ParamsStoreKeySignedValsetsWindow = []byte("SignedValsetsWindow")
 
@@ -91,7 +94,7 @@ func DefaultGenesisState() *GenesisState {
 // DefaultParams returns a copy of the default params
 func DefaultParams() *Params {
 	return &Params{
-		PeggyId:                       "defaultpeggyid",
+		PeggyId:                       "injective-peggyid",
 		SignedValsetsWindow:           10000,
 		SignedBatchesWindow:           10000,
 		SignedClaimsWindow:            10000,
@@ -118,6 +121,9 @@ func (p Params) ValidateBasic() error {
 	}
 	if err := validateBridgeChainID(p.BridgeChainId); err != nil {
 		return sdkerrors.Wrap(err, "bridge chain id")
+	}
+	if err := validateInjContractAddress(p.InjContractAddress); err != nil {
+		return sdkerrors.Wrap(err, "bridge contract address")
 	}
 	if err := validateTargetBatchTimeout(p.TargetBatchTimeout); err != nil {
 		return sdkerrors.Wrap(err, "Batch timeout")
@@ -165,6 +171,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamsStoreKeyContractHash, &p.ContractSourceHash, validateContractHash),
 		paramtypes.NewParamSetPair(ParamsStoreKeyBridgeContractAddress, &p.BridgeEthereumAddress, validateBridgeContractAddress),
 		paramtypes.NewParamSetPair(ParamsStoreKeyBridgeContractChainID, &p.BridgeChainId, validateBridgeChainID),
+		paramtypes.NewParamSetPair(ParamsStoreKeyInjContractAddress, &p.InjContractAddress, validateInjContractAddress),
 		paramtypes.NewParamSetPair(ParamsStoreKeySignedValsetsWindow, &p.SignedValsetsWindow, validateSignedValsetsWindow),
 		paramtypes.NewParamSetPair(ParamsStoreKeySignedBatchesWindow, &p.SignedBatchesWindow, validateSignedBatchesWindow),
 		paramtypes.NewParamSetPair(ParamsStoreKeySignedClaimsWindow, &p.SignedClaimsWindow, validateSignedClaimsWindow),
@@ -327,4 +334,18 @@ func strToFixByteArray(s string) ([32]byte, error) {
 	}
 	copy(out[:], s)
 	return out, nil
+}
+
+func validateInjContractAddress(i interface{}) error {
+	v, ok := i.(string)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+	if err := ValidateEthAddress(v); err != nil {
+		// TODO: ensure that empty addresses are valid in params
+		if !strings.Contains(err.Error(), "empty") {
+			return err
+		}
+	}
+	return nil
 }

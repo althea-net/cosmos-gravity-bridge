@@ -43,6 +43,12 @@ func (k Keeper) DenomToERC20Lookup(ctx sdk.Context, denom string) (bool, string,
 	tc1, err := types.PeggyDenomToERC20(denom)
 
 	if err != nil {
+
+		// If denom is inj, return INJ Contract address from Params.
+		if denom == "inj" {
+			return false, k.GetInjContractAddress(ctx), nil
+		}
+
 		// Look up ERC20 contract in index and error if it's not in there.
 		tc2, exists := k.GetCosmosOriginatedERC20(ctx, denom)
 		if !exists {
