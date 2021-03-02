@@ -132,7 +132,6 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 	for _, vs := range unslashedValsets {
 		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		confirms := k.GetValsetConfirms(ctx, vs.Nonce)
-		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		for _, val := range currentBondedSet {
 
 			// Don't slash validators who joined after valset is created
