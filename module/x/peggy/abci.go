@@ -199,10 +199,6 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 
 	unslashedBatches := k.GetUnSlashedBatches(ctx, maxHeight)
 	for _, batch := range unslashedBatches {
-<<<<<<< HEAD
-
-=======
->>>>>>> 303cf52dce02a4cdfc7aca9e50d20f695f39be41
 		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		confirms := k.GetBatchConfirmByNonceAndTokenContract(ctx, batch.BatchNonce, batch.TokenContract)
 		for _, val := range currentBondedSet {
