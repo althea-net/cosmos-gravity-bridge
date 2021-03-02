@@ -128,10 +128,9 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 
 	unslashedValsets := k.GetUnSlashedValsets(ctx, maxHeight)
 
-	currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
-
 	// unslashedValsets are sorted by nonce in ASC order
 	for _, vs := range unslashedValsets {
+		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		confirms := k.GetValsetConfirms(ctx, vs.Nonce)
 		for _, val := range currentBondedSet {
 
@@ -191,11 +190,9 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 		maxHeight = uint64(ctx.BlockHeight()) - params.SignedBatchesWindow
 	}
 
-	currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
-
 	unslashedBatches := k.GetUnSlashedBatches(ctx, maxHeight)
 	for _, batch := range unslashedBatches {
-
+		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		confirms := k.GetBatchConfirmByNonceAndTokenContract(ctx, batch.BatchNonce, batch.TokenContract)
 		for _, val := range currentBondedSet {
 			// Don't slash validators who joined after batch is created
@@ -235,9 +232,10 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 func ClaimsSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 	// #3 condition
 	// Oracle events MsgDepositClaim, MsgWithdrawClaim
-	currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
+
 	attmap := k.GetAttestationMapping(ctx)
 	for _, atts := range attmap {
+		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		// slash conflicting votes
 		if len(atts) > 1 {
 			var unObs []types.Attestation
