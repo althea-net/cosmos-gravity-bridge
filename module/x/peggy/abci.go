@@ -3,9 +3,11 @@ package peggy
 import (
 	"sort"
 
+	"github.com/althea-net/peggy/module/app"
 	"github.com/althea-net/peggy/module/x/peggy/keeper"
 	"github.com/althea-net/peggy/module/x/peggy/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // EndBlocker is called at the end of every block
@@ -130,40 +132,72 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 
 	// unslashedValsets are sorted by nonce in ASC order
 	for _, vs := range unslashedValsets {
-		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		confirms := k.GetValsetConfirms(ctx, vs.Nonce)
+
+		// SLASH BONDED VALIDTORS who didn't attest valset request
+		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		for _, val := range currentBondedSet {
 
-			// Don't slash validators who joined after valset is created
 			consAddr, _ := val.GetConsAddr()
 			valSigningInfo, exist := k.SlashingKeeper.GetValidatorSigningInfo(ctx, consAddr)
-			if exist && valSigningInfo.StartHeight > int64(vs.Nonce) {
-				continue
-			}
 
-			// Don't slash validators who are unbonded and UNBOND_SLASHING_WINDOW has passed
-			if val.UnbondingHeight > 0 && vs.Nonce > uint64(val.UnbondingHeight)+params.UnbondSlashingValsetsWindow {
-				continue
-			}
+			//  Slash validators ONLY if he is joined after valset is created
+			if exist && valSigningInfo.StartHeight < int64(vs.Nonce) {
+				// Check if validator has confirmed valset or not
+				found := false
+				for _, conf := range confirms {
+					if conf.EthAddress == k.GetEthAddress(ctx, val.GetOperator()) {
+						found = true
+						break
+					}
+				}
+				// slash validators for not confirming valsets
+				if !found {
+					cons, _ := val.GetConsAddr()
+					k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), val.ConsensusPower(), params.SlashFractionValset)
+					k.StakingKeeper.Jail(ctx, cons)
 
-			// Check if validator has confirmed valset or not
-			found := false
-			for _, conf := range confirms {
-				if conf.EthAddress == k.GetEthAddress(ctx, val.GetOperator()) {
-					found = true
-					break
 				}
 			}
 
-			// slash validators for not confirming valsets
-			if !found {
-				cons, _ := val.GetConsAddr()
-				k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), val.ConsensusPower(), params.SlashFractionValset)
-				k.StakingKeeper.Jail(ctx, cons)
-
-			}
 		}
 
+		// SLASH UNBONDING VALIDATORS who didn't attest valset request
+		blockTime := ctx.BlockTime().Add(k.StakingKeeper.GetParams(ctx).UnbondingTime)
+		blockHeight := ctx.BlockHeight()
+		unbondingValIterator := k.StakingKeeper.ValidatorQueueIterator(ctx, blockTime, blockHeight)
+		defer unbondingValIterator.Close()
+
+		// All unbonding validators
+		for ; unbondingValIterator.Valid(); unbondingValIterator.Next() {
+			unbondingValidators := stakingtypes.ValAddresses{}
+			app.MakeCodec().MustUnmarshalBinaryBare(unbondingValIterator.Value(), unbondingValidators)
+
+			for _, valAddr := range unbondingValidators.Addresses {
+				validator, exist := k.StakingKeeper.GetValidator(ctx, sdk.ValAddress(valAddr))
+				valConsAddr, _ := validator.GetConsAddr()
+				valSigningInfo, exist := k.SlashingKeeper.GetValidatorSigningInfo(ctx, valConsAddr)
+
+				// Only slash validators who joined after valset is created and if they are unbonding and UNBOND_SLASHING_WINDOW didn't passed
+				if exist && valSigningInfo.StartHeight < int64(vs.Nonce) && validator.IsUnbonding() && vs.Nonce < uint64(validator.UnbondingHeight)+params.UnbondSlashingValsetsWindow {
+					// Check if validator has confirmed valset or not
+					found := false
+					for _, conf := range confirms {
+						if conf.EthAddress == k.GetEthAddress(ctx, validator.GetOperator()) {
+							found = true
+							break
+						}
+					}
+
+					// slash validators for not confirming valsets
+					if !found {
+						k.StakingKeeper.Slash(ctx, valConsAddr, ctx.BlockHeight(), validator.ConsensusPower(), params.SlashFractionValset)
+						k.StakingKeeper.Jail(ctx, valConsAddr)
+
+					}
+				}
+			}
+		}
 		// then we set the latest slashed valset  nonce
 		k.SetLastSlashedValsetNonce(ctx, vs.Nonce)
 	}
