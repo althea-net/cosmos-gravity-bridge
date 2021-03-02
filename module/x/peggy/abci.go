@@ -3,11 +3,9 @@ package peggy
 import (
 	"sort"
 
-	"github.com/althea-net/peggy/module/app"
 	"github.com/althea-net/peggy/module/x/peggy/keeper"
 	"github.com/althea-net/peggy/module/x/peggy/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // EndBlocker is called at the end of every block
@@ -159,7 +157,6 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 
 				}
 			}
-
 		}
 
 		// SLASH UNBONDING VALIDATORS who didn't attest valset request
@@ -170,8 +167,7 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 
 		// All unbonding validators
 		for ; unbondingValIterator.Valid(); unbondingValIterator.Next() {
-			unbondingValidators := stakingtypes.ValAddresses{}
-			app.MakeCodec().MustUnmarshalBinaryBare(unbondingValIterator.Value(), unbondingValidators)
+			unbondingValidators := k.GetUnbondingvalidators(unbondingValIterator.Value())
 
 			for _, valAddr := range unbondingValidators.Addresses {
 				validator, exist := k.StakingKeeper.GetValidator(ctx, sdk.ValAddress(valAddr))

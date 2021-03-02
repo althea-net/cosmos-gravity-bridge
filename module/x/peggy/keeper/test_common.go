@@ -576,6 +576,18 @@ func (s *StakingKeeperMock) ValidatorByConsAddr(ctx sdk.Context, addr sdk.ConsAd
 	return nil
 }
 
+func (s *StakingKeeperMock) GetParams(ctx sdk.Context) stakingtypes.Params {
+	panic("unexpected call")
+}
+
+func (s *StakingKeeperMock) GetValidator(ctx sdk.Context, addr sdk.ValAddress) (validator stakingtypes.Validator, found bool) {
+	panic("unexpected call")
+}
+
+func (s *StakingKeeperMock) ValidatorQueueIterator(ctx sdk.Context, endTime time.Time, endHeight int64) sdk.Iterator {
+	panic("unexpected call")
+}
+
 // Slash staisfies the interface
 func (s *StakingKeeperMock) Slash(sdk.Context, sdk.ConsAddress, int64, int64, sdk.Dec) {}
 

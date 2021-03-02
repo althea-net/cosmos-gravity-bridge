@@ -12,6 +12,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/tendermint/tendermint/libs/log"
 )
 
@@ -664,6 +665,14 @@ func (k Keeper) GetDelegateKeys(ctx sdk.Context) []*types.MsgSetOrchestratorAddr
 	})
 
 	return result
+}
+
+// GetUnbondingvalidators returns UnbondingValidators.
+// Adding here in peggy keeper as cdc is available inside endblocker.
+func (k Keeper) GetUnbondingvalidators(unbondingVals []byte) stakingtypes.ValAddresses {
+	unbondingValidators := stakingtypes.ValAddresses{}
+	k.cdc.MustUnmarshalBinaryBare(unbondingVals, &unbondingValidators)
+	return unbondingValidators
 }
 
 // prefixRange turns a prefix into a (start, end) range. The start is the given prefix value and
