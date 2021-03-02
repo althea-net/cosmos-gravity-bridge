@@ -6,7 +6,6 @@ import (
 	"github.com/althea-net/peggy/module/x/peggy/keeper"
 	"github.com/althea-net/peggy/module/x/peggy/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // EndBlocker is called at the end of every block
@@ -20,13 +19,12 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 func slashing(ctx sdk.Context, k keeper.Keeper) {
 
 	params := k.GetParams(ctx)
-	currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 
 	// Slash validator for not confirming valset requests, batch requests and not attesting claims rightfully
-	ValsetSlashing(ctx, k, params, currentBondedSet)
-	BatchSlashing(ctx, k, params, currentBondedSet)
+	ValsetSlashing(ctx, k, params)
+	BatchSlashing(ctx, k, params)
 	// TODO slashing for arbitrary logic is missing
-	ClaimsSlashing(ctx, k, params, currentBondedSet)
+	ClaimsSlashing(ctx, k, params)
 
 	// #4 condition (stretch goal)
 	// TODO: lost eth key or delegate key
@@ -119,7 +117,7 @@ func cleanupTimedOutLogicCalls(ctx sdk.Context, k keeper.Keeper) {
 	}
 }
 
-func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, currentBondedSet []stakingtypes.Validator) {
+func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 
 	maxHeight := uint64(0)
 
@@ -129,6 +127,8 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, curre
 	}
 
 	unslashedValsets := k.GetUnSlashedValsets(ctx, maxHeight)
+
+	currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 
 	// unslashedValsets are sorted by nonce in ASC order
 	for _, vs := range unslashedValsets {
@@ -179,7 +179,7 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, curre
 	}
 }
 
-func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, currentBondedSet []stakingtypes.Validator) {
+func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 
 	// #2 condition
 	// We look through the full bonded set (not just the active set, include unbonding validators)
@@ -190,6 +190,8 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, curren
 	if uint64(ctx.BlockHeight()) > params.SignedBatchesWindow {
 		maxHeight = uint64(ctx.BlockHeight()) - params.SignedBatchesWindow
 	}
+
+	currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 
 	unslashedBatches := k.GetUnSlashedBatches(ctx, maxHeight)
 	for _, batch := range unslashedBatches {
@@ -230,9 +232,10 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, curren
 	}
 }
 
-func ClaimsSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params, currentBondedSet []stakingtypes.Validator) {
+func ClaimsSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 	// #3 condition
 	// Oracle events MsgDepositClaim, MsgWithdrawClaim
+	currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 	attmap := k.GetAttestationMapping(ctx)
 	for _, atts := range attmap {
 		// slash conflicting votes
