@@ -182,6 +182,23 @@ func (k Keeper) GetLastSlashedValsetNonce(ctx sdk.Context) uint64 {
 	return types.UInt64FromBytes(bytes)
 }
 
+// SetLastUnBondingBlockHeight sets the last unbonding block height
+func (k Keeper) SetLastUnBondingBlockHeight(ctx sdk.Context, unbondingBlockHeight uint64) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.LastUnBondingBlockHeight, types.UInt64Bytes(unbondingBlockHeight))
+}
+
+// GetLastUnBondingBlockHeight returns the last unbonding block height
+func (k Keeper) GetLastUnBondingBlockHeight(ctx sdk.Context) uint64 {
+	store := ctx.KVStore(k.storeKey)
+	bytes := store.Get(types.LastUnBondingBlockHeight)
+
+	if len(bytes) == 0 {
+		return 0
+	}
+	return types.UInt64FromBytes(bytes)
+}
+
 // GetUnSlashedValsets returns all the unslashed validator sets in state
 func (k Keeper) GetUnSlashedValsets(ctx sdk.Context, maxHeight uint64) (out []*types.Valset) {
 	lastSlashedValsetNonce := k.GetLastSlashedValsetNonce(ctx)
