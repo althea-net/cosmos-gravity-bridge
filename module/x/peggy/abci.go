@@ -153,7 +153,9 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 				if !found {
 					cons, _ := val.GetConsAddr()
 					k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), val.ConsensusPower(), params.SlashFractionValset)
-					k.StakingKeeper.Jail(ctx, cons)
+					if !val.IsJailed() {
+						k.StakingKeeper.Jail(ctx, cons)
+					}
 
 				}
 			}
@@ -174,7 +176,7 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 				valConsAddr, _ := validator.GetConsAddr()
 				valSigningInfo, exist := k.SlashingKeeper.GetValidatorSigningInfo(ctx, valConsAddr)
 
-				// Only slash validators who joined after valset is created and if they are unbonding and UNBOND_SLASHING_WINDOW didn't passed
+				// Only slash validators who joined after valset is created and they are unbonding and UNBOND_SLASHING_WINDOW didn't passed
 				if exist && valSigningInfo.StartHeight < int64(vs.Nonce) && validator.IsUnbonding() && vs.Nonce < uint64(validator.UnbondingHeight)+params.UnbondSlashingValsetsWindow {
 					// Check if validator has confirmed valset or not
 					found := false
@@ -188,8 +190,9 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 					// slash validators for not confirming valsets
 					if !found {
 						k.StakingKeeper.Slash(ctx, valConsAddr, ctx.BlockHeight(), validator.ConsensusPower(), params.SlashFractionValset)
-						k.StakingKeeper.Jail(ctx, valConsAddr)
-
+						if !validator.IsJailed() {
+							k.StakingKeeper.Jail(ctx, valConsAddr)
+						}
 					}
 				}
 			}
@@ -255,7 +258,9 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 			if !found {
 				cons, _ := val.GetConsAddr()
 				k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), val.ConsensusPower(), params.SlashFractionBatch)
-				k.StakingKeeper.Jail(ctx, cons)
+				if !val.IsJailed() {
+					k.StakingKeeper.Jail(ctx, cons)
+				}
 			}
 		}
 
@@ -324,7 +329,9 @@ func ClaimsSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 					if !found {
 						cons, _ := bv.GetConsAddr()
 						k.StakingKeeper.Slash(ctx, cons, ctx.BlockHeight(), k.StakingKeeper.GetLastValidatorPower(ctx, bv.GetOperator()), params.SlashFractionClaim)
-						k.StakingKeeper.Jail(ctx, cons)
+						if !bv.IsJailed() {
+							k.StakingKeeper.Jail(ctx, cons)
+						}
 					}
 				}
 				claim, err := k.UnpackAttestationClaim(&att)
