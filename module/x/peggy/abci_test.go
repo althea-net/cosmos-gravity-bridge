@@ -171,6 +171,8 @@ func TestBatchSlashing(t *testing.T) {
 	pk := input.PeggyKeeper
 	params := pk.GetParams(ctx)
 
+	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + int64(params.SignedValsetsWindow) + 2)
+
 	// First store a batch
 	batch := &types.OutgoingTxBatch{
 		BatchNonce:    1,
