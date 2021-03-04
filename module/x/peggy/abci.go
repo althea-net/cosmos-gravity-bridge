@@ -234,6 +234,8 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 
 	unslashedBatches := k.GetUnSlashedBatches(ctx, maxHeight)
 	for _, batch := range unslashedBatches {
+
+		// SLASH BONDED VALIDTORS who didn't attest batch requests
 		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		confirms := k.GetBatchConfirmByNonceAndTokenContract(ctx, batch.BatchNonce, batch.TokenContract)
 		for _, val := range currentBondedSet {
@@ -241,11 +243,6 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 			consAddr, _ := val.GetConsAddr()
 			valSigningInfo, exist := k.SlashingKeeper.GetValidatorSigningInfo(ctx, consAddr)
 			if exist && valSigningInfo.StartHeight > int64(batch.Block) {
-				continue
-			}
-
-			// Don't slash validators who are unbonded and UNBOND_SLASHING_WINDOW has passed
-			if val.UnbondingHeight > 0 && batch.Block > uint64(val.UnbondingHeight)+params.UnbondSlashingBatchWindow {
 				continue
 			}
 
@@ -266,7 +263,6 @@ func BatchSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 				}
 			}
 		}
-
 		// then we set the latest slashed batch block
 		k.SetLastSlashedBatchBlock(ctx, batch.Block)
 
