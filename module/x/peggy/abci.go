@@ -135,11 +135,10 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 		// SLASH BONDED VALIDTORS who didn't attest valset request
 		currentBondedSet := k.StakingKeeper.GetBondedValidatorsByPower(ctx)
 		for _, val := range currentBondedSet {
-
 			consAddr, _ := val.GetConsAddr()
 			valSigningInfo, exist := k.SlashingKeeper.GetValidatorSigningInfo(ctx, consAddr)
 
-			//  Slash validators ONLY if he is joined after valset is created
+			//  Slash validator ONLY if he joined after valset is created
 			if exist && valSigningInfo.StartHeight < int64(vs.Nonce) {
 				// Check if validator has confirmed valset or not
 				found := false
@@ -172,7 +171,11 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 			unbondingValidators := k.GetUnbondingvalidators(unbondingValIterator.Value())
 
 			for _, valAddr := range unbondingValidators.Addresses {
-				validator, exist := k.StakingKeeper.GetValidator(ctx, sdk.ValAddress(valAddr))
+				addr, err := sdk.ValAddressFromBech32(valAddr)
+				if err != nil {
+					panic(err)
+				}
+				validator, exist := k.StakingKeeper.GetValidator(ctx, sdk.ValAddress(addr))
 				valConsAddr, _ := validator.GetConsAddr()
 				valSigningInfo, exist := k.SlashingKeeper.GetValidatorSigningInfo(ctx, valConsAddr)
 
@@ -204,7 +207,7 @@ func ValsetSlashing(ctx sdk.Context, k keeper.Keeper, params types.Params) {
 	// Auto ValsetRequest Creation.
 	/*
 			1. If there are no valset requests, create a new one.
-			2. If there is atleast one validator who started unbondinging in current block. (we persist last unbonded block height in hooks.go)
+			2. If there is atleast one validator who started unbonding in current block. (we persist last unbonded block height in hooks.go)
 			   This will make sure the unbonding validator has to provide an attestation to a new Valset
 		       that excludes him before he completely Unbonds.  Otherwise he will be slashed
 			3. If power change between validators of CurrentValset and latest valset request is > 5%
