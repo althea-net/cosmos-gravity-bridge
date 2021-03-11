@@ -176,7 +176,7 @@ pub fn parse_contract_addresses() -> BootstrapContractAddresses {
     let mut erc20_addresses = Vec::new();
     let mut uniswap_liquidity = None;
     for line in output.lines() {
-        if line.contains("Peggy deployed at Address -") {
+        if line.contains("Gravity deployed at Address -") {
             let address_string = line.split('-').last().unwrap();
             maybe_peggy_address = Some(address_string.trim().parse().unwrap());
         } else if line.contains("ERC20 deployed at Address -") {
