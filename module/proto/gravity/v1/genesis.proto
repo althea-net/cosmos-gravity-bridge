@@ -135,4 +135,5 @@ message GenesisState {
   repeated MsgSetOrchestratorAddress delegate_keys       = 10;
   repeated ERC20ToDenom              erc20_to_denoms     = 11;
   repeated OutgoingTransferTx        unbatched_transfers = 12;
+  repeated string                    ethereum_tokens     = 13;
 }

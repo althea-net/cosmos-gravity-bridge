@@ -13,10 +13,11 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 	params := k.GetParams(ctx)
 	slashing(ctx, k)
 	attestationTally(ctx, k)
+	createValsets(ctx, k)
+	createBatches(ctx, k)
+	pruneValsets(ctx, k, params)
 	cleanupTimedOutBatches(ctx, k)
 	cleanupTimedOutLogicCalls(ctx, k)
-	createValsets(ctx, k)
-	pruneValsets(ctx, k, params)
 	// TODO: prune claims, attestations when they pass in the handler see issue #342
 }
 
@@ -37,6 +38,22 @@ func createValsets(ctx sdk.Context, k keeper.Keeper) {
 		// if the conditions are true, put in a new validator set request to be signed and submitted to Ethereum
 		k.SetValsetRequest(ctx)
 	}
+}
+
+func createBatches(ctx sdk.Context, k keeper.Keeper) {
+	// Auto BatchRequest Creation.
+	// This function automatically requests batches of all token types every 5 blocks
+	// thanks to the more profitable batches rule (see batch creation spec) new batches
+	// will not be created unless the sum of their fees is greater than the previous batch
+	// that has not yet been executed. Eventually batches will either time out, or a
+	// batch profitable enough to submit will be generated.
+	if ctx.BlockHeight()%5 == 0 {
+		tokens := k.GetEthereumOriginatedErc20Tokens(ctx)
+		for _, token := range tokens {
+			k.BuildOutgoingTXBatch(ctx, token, keeper.OutgoingTxBatchSize)
+		}
+	}
+
 }
 
 func pruneValsets(ctx sdk.Context, k keeper.Keeper, params types.Params) {

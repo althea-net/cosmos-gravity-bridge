@@ -15,9 +15,6 @@ service Msg {
   rpc SendToEth(MsgSendToEth) returns (MsgSendToEthResponse) {
     option (google.api.http).post = "/gravity/v1/send_to_eth";
   }
-  rpc RequestBatch(MsgRequestBatch) returns (MsgRequestBatchResponse) {
-    option (google.api.http).post = "/gravity/v1/request_batch";
-  }
   rpc ConfirmBatch(MsgConfirmBatch) returns (MsgConfirmBatchResponse) {
     option (google.api.http).post = "/gravity/v1/confirm_batch";
   }
@@ -121,22 +118,6 @@ message MsgSendToEth {
 }
 
 message MsgSendToEthResponse {}
-
-// MsgRequestBatch
-// this is a message anyone can send that requests a batch of transactions to
-// send across the bridge be created for whatever block height this message is
-// included in. This acts as a coordination point, the handler for this message
-// looks at the AddToOutgoingPool tx's in the store and generates a batch, also
-// available in the store tied to this message. The validators then grab this
-// batch, sign it, submit the signatures with a MsgConfirmBatch before a relayer
-// can finally submit the batch
-// -------------
-message MsgRequestBatch {
-  string sender = 1;
-  string denom        = 2;
-}
-
-message MsgRequestBatchResponse {}
 
 // MsgConfirmBatch
 // When validators observe a MsgRequestBatch they form a batch by ordering

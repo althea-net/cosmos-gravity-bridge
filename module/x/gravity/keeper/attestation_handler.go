@@ -51,6 +51,12 @@ func (a AttestationHandler) Handle(ctx sdk.Context, att types.Attestation, claim
 			if err = a.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, addr, coins); err != nil {
 				return sdkerrors.Wrap(err, "transfer vouchers")
 			}
+
+			// add to list of Ethereum tokens we have on our chain, it's safe
+			// to run the set command, but reads are cheaper than writes
+			if a.keeper.GetEthereumOriginatedErc20(ctx, claim.TokenContract) {
+				a.keeper.SetEthereumOriginatedErc20(ctx, claim.TokenContract)
+			}
 		}
 	// withdraw in this context means a withdraw from the Ethereum side of the bridge
 	case *types.MsgBatchSendToEthClaim:

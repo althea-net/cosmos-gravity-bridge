@@ -122,10 +122,6 @@ pub struct CosmosToEthOpts {
     /// The destination address on the Ethereum chain
     #[clap(short, long, parse(try_from_str))]
     pub eth_destination: EthAddress,
-    /// If this command should request a batch to push
-    /// your tx along immediately
-    #[clap(short, long)]
-    pub no_batch: bool,
 }
 
 /// Send an Ethereum ERC20 token to Cosmos

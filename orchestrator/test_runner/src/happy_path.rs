@@ -10,7 +10,7 @@ use crate::STARTING_STAKE_PER_VALIDATOR;
 use crate::TOTAL_TIMEOUT;
 use clarity::PrivateKey as EthPrivateKey;
 use clarity::{Address as EthAddress, Uint256};
-use cosmos_gravity::send::{send_request_batch, send_to_eth};
+use cosmos_gravity::send::send_to_eth;
 use cosmos_gravity::{query::get_oldest_unsigned_transaction_batch, send::send_ethereum_claims};
 use deep_space::address::Address as CosmosAddress;
 use deep_space::coin::Coin;
@@ -343,16 +343,6 @@ async fn test_batch(
     .await
     .unwrap();
     info!("Sent tokens to Ethereum with {:?}", res);
-
-    info!("Requesting transaction batch");
-    send_request_batch(
-        requester_cosmos_private_key,
-        token_name.clone(),
-        get_fee(),
-        &contact,
-    )
-    .await
-    .unwrap();
 
     contact.wait_for_next_block(TOTAL_TIMEOUT).await.unwrap();
     let requester_address = requester_cosmos_private_key

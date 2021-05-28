@@ -19,7 +19,6 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgValsetConfirm{},
 		&MsgSendToEth{},
-		&MsgRequestBatch{},
 		&MsgConfirmBatch{},
 		&MsgConfirmLogicCall{},
 		&MsgSendToCosmosClaim{},
@@ -51,7 +50,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgSetOrchestratorAddress{}, "gravity/MsgSetOrchestratorAddress", nil)
 	cdc.RegisterConcrete(&MsgValsetConfirm{}, "gravity/MsgValsetConfirm", nil)
 	cdc.RegisterConcrete(&MsgSendToEth{}, "gravity/MsgSendToEth", nil)
-	cdc.RegisterConcrete(&MsgRequestBatch{}, "gravity/MsgRequestBatch", nil)
 	cdc.RegisterConcrete(&MsgConfirmBatch{}, "gravity/MsgConfirmBatch", nil)
 	cdc.RegisterConcrete(&MsgConfirmLogicCall{}, "gravity/MsgConfirmLogicCall", nil)
 	cdc.RegisterConcrete(&Valset{}, "gravity/Valset", nil)

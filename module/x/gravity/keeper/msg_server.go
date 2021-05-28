@@ -119,33 +119,6 @@ func (k msgServer) SendToEth(c context.Context, msg *types.MsgSendToEth) (*types
 	return &types.MsgSendToEthResponse{}, nil
 }
 
-// RequestBatch handles MsgRequestBatch
-func (k msgServer) RequestBatch(c context.Context, msg *types.MsgRequestBatch) (*types.MsgRequestBatchResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-
-	// Check if the denom is a gravity coin, if not, check if there is a deployed ERC20 representing it.
-	// If not, error out
-	_, tokenContract, err := k.DenomToERC20Lookup(ctx, msg.Denom)
-	if err != nil {
-		return nil, err
-	}
-
-	batch, err := k.BuildOutgoingTXBatch(ctx, tokenContract, OutgoingTxBatchSize)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, msg.Type()),
-			sdk.NewAttribute(types.AttributeKeyBatchNonce, fmt.Sprint(batch.BatchNonce)),
-		),
-	)
-
-	return &types.MsgRequestBatchResponse{}, nil
-}
-
 // ConfirmBatch handles MsgConfirmBatch
 func (k msgServer) ConfirmBatch(c context.Context, msg *types.MsgConfirmBatch) (*types.MsgConfirmBatchResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)

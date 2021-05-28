@@ -20,7 +20,6 @@ use gravity_proto::gravity::MsgConfirmBatch;
 use gravity_proto::gravity::MsgConfirmLogicCall;
 use gravity_proto::gravity::MsgErc20DeployedClaim;
 use gravity_proto::gravity::MsgLogicCallExecutedClaim;
-use gravity_proto::gravity::MsgRequestBatch;
 use gravity_proto::gravity::MsgSendToCosmosClaim;
 use gravity_proto::gravity::MsgSendToEth;
 use gravity_proto::gravity::MsgSetOrchestratorAddress;
@@ -447,47 +446,6 @@ pub async fn send_to_eth(
     };
 
     let msg = Msg::new("/gravity.v1.MsgSendToEth", msg_send_to_eth);
-
-    let args = contact.get_message_args(our_address, fee).await?;
-    trace!("got optional tx info");
-
-    let msg_bytes = private_key.sign_std_msg(&[msg], args, MEMO)?;
-
-    let mut txrpc = TxServiceClient::connect(contact.get_url()).await?;
-    let response = txrpc
-        .broadcast_tx(BroadcastTxRequest {
-            tx_bytes: msg_bytes,
-            mode: BroadcastMode::Sync.into(),
-        })
-        .await?;
-    let response = response.into_inner();
-
-    contact
-        .wait_for_tx(response.tx_response.unwrap(), TIMEOUT)
-        .await
-}
-
-pub async fn send_request_batch(
-    private_key: PrivateKey,
-    denom: String,
-    fee: Coin,
-    contact: &Contact,
-) -> Result<TxResponse, CosmosGrpcError> {
-    let our_address = private_key.to_address(&contact.get_prefix()).unwrap();
-
-    let msg_request_batch = MsgRequestBatch {
-        sender: our_address.to_string(),
-        denom,
-    };
-
-    let fee = Fee {
-        amount: vec![fee],
-        gas_limit: 500_000_000u64,
-        granter: None,
-        payer: None,
-    };
-
-    let msg = Msg::new("/gravity.v1.MsgRequestBatch", msg_request_batch);
 
     let args = contact.get_message_args(our_address, fee).await?;
     trace!("got optional tx info");

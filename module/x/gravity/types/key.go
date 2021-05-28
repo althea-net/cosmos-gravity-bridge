@@ -127,6 +127,11 @@ var (
 
 	// PastEthSignatureCheckpointKey indexes eth signature checkpoints that have existed
 	PastEthSignatureCheckpointKey = []byte{0x1b}
+
+	// EthereumOriginatedTokensKey
+	// Gets a list of all Ethereum originated tokens on the chain, useful for automatically
+	// requesting batches.
+	EthereumOriginatedTokensKey = []byte{0x1c}
 )
 
 // GetOrchestratorAddressKey returns the following key format
@@ -299,4 +304,11 @@ func GetLogicConfirmKey(invalidationId []byte, invalidationNonce uint64, validat
 // [0x0][ checkpoint bytes ]
 func GetPastEthSignatureCheckpointKey(checkpoint []byte) []byte {
 	return append(PastEthSignatureCheckpointKey, checkpoint...)
+}
+
+// GetPastEthSignatureCheckpointKey returns the following key format
+// prefix    checkpoint
+// [0x0][ ERC20 token address bytes ]
+func GetEthereumOriginatedTokensKey(a []byte) []byte {
+	return append(EthereumOriginatedTokensKey, a...)
 }

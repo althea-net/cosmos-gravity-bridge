@@ -37,7 +37,7 @@ func (k Keeper) BuildOutgoingTXBatch(
 		// fees a hypothetical batch would have if created
 		currentFees := k.GetBatchFeesByTokenType(ctx, contractAddress, maxElements)
 		if currentFees == nil {
-			return nil, sdkerrors.Wrap(types.ErrInvalid, "error getting fees from tx pool")
+			panic("error getting fees from tx pool")
 		}
 
 		lastFees := lastBatch.GetFees()
@@ -48,6 +48,7 @@ func (k Keeper) BuildOutgoingTXBatch(
 
 	selectedTx, err := k.pickUnbatchedTX(ctx, contractAddress, maxElements)
 	if len(selectedTx) == 0 || err != nil {
+		// no transactions to pick, exiting
 		return nil, err
 	}
 	nextID := k.autoIncrementID(ctx, types.KeyLastOutgoingBatchID)

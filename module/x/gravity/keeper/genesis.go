@@ -131,6 +131,11 @@ func InitGenesis(ctx sdk.Context, k Keeper, data types.GenesisState) {
 		}
 	}
 
+	// restore list of Ethereum originates tokens on Cosmos
+	for _, item := range data.EthereumTokens {
+		k.SetEthereumOriginatedErc20(ctx, item)
+	}
+
 }
 
 // ExportGenesis exports all the state needed to restart the chain
@@ -150,6 +155,7 @@ func ExportGenesis(ctx sdk.Context, k Keeper) types.GenesisState {
 		lastobserved       = k.GetLastObservedEventNonce(ctx)
 		erc20ToDenoms      = []*types.ERC20ToDenom{}
 		unbatchedTransfers = k.GetPoolTransactions(ctx)
+		ethereumOriginated = k.GetEthereumOriginatedErc20Tokens(ctx)
 	)
 
 	// export valset confirmations from state
@@ -197,5 +203,6 @@ func ExportGenesis(ctx sdk.Context, k Keeper) types.GenesisState {
 		DelegateKeys:       delegates,
 		Erc20ToDenoms:      erc20ToDenoms,
 		UnbatchedTransfers: unbatchedTransfers,
+		EthereumTokens:     ethereumOriginated,
 	}
 }

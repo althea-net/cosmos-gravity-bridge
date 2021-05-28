@@ -14,7 +14,6 @@ var (
 	_ sdk.Msg = &MsgValsetConfirm{}
 	_ sdk.Msg = &MsgSendToEth{}
 	_ sdk.Msg = &MsgCancelSendToEth{}
-	_ sdk.Msg = &MsgRequestBatch{}
 	_ sdk.Msg = &MsgConfirmBatch{}
 	_ sdk.Msg = &MsgERC20DeployedClaim{}
 	_ sdk.Msg = &MsgConfirmLogicCall{}
@@ -164,42 +163,6 @@ func (msg MsgSendToEth) GetSignBytes() []byte {
 
 // GetSigners defines whose signature is required
 func (msg MsgSendToEth) GetSigners() []sdk.AccAddress {
-	acc, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-
-	return []sdk.AccAddress{acc}
-}
-
-// NewMsgRequestBatch returns a new msgRequestBatch
-func NewMsgRequestBatch(orchestrator sdk.AccAddress) *MsgRequestBatch {
-	return &MsgRequestBatch{
-		Sender: orchestrator.String(),
-	}
-}
-
-// Route should return the name of the module
-func (msg MsgRequestBatch) Route() string { return RouterKey }
-
-// Type should return the action
-func (msg MsgRequestBatch) Type() string { return "request_batch" }
-
-// ValidateBasic performs stateless checks
-func (msg MsgRequestBatch) ValidateBasic() error {
-	if _, err := sdk.AccAddressFromBech32(msg.Sender); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
-	}
-	return nil
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgRequestBatch) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
-}
-
-// GetSigners defines whose signature is required
-func (msg MsgRequestBatch) GetSigners() []sdk.AccAddress {
 	acc, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
