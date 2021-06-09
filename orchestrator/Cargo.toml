@@ -4,3 +4,5 @@ default-members = ["gbt"]
 
 
 [patch.crates-io]
+deep_space = {git = "https://github.com/public-awesome/deep_space", branch="fix/query-for-tx"}
+
