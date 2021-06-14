@@ -19,9 +19,10 @@ pub async fn find_latest_valset(
     const BLOCKS_TO_SEARCH: u128 = 5_000u128;
     let latest_block = web3.eth_block_number().await?;
     let mut current_block: Uint256 = latest_block.clone();
+    info!("block number {}", current_block);
 
-    while current_block.clone() > 0u8.into() {
-        trace!(
+    while current_block.clone() >= 0u8.into() {
+        info!(
             "About to submit a Valset or Batch looking back into the history to find the last Valset Update, on block {}",
             current_block
         );
@@ -41,10 +42,11 @@ pub async fn find_latest_valset(
         // by default the lowest found valset goes first, we want the highest.
         all_valset_events.reverse();
 
-        trace!("Found events {:?}", all_valset_events);
+        info!("Found events {:?}", all_valset_events);
 
         // we take only the first event if we find any at all.
         if !all_valset_events.is_empty() {
+            info!("IN HERE 1...");
             let event = &all_valset_events[0];
             match ValsetUpdatedEvent::from_log(event) {
                 Ok(event) => {
@@ -63,7 +65,11 @@ pub async fn find_latest_valset(
                 Err(e) => error!("Got valset event that we can't parse {}", e),
             }
         }
+        info!("IN HERE 2...");
         current_block = end_search;
+        let test = current_block.clone();
+        info!("test {}", test);
+        info!("IN HERE 3...");
     }
 
     panic!("Could not find the last validator set for contract {}, probably not a valid Gravity contract!", gravity_contract_address)

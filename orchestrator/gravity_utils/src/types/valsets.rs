@@ -331,7 +331,7 @@ impl From<&gravity_proto::gravity::Valset> for Valset {
         Valset {
             nonce: input.nonce,
             members: input.members.iter().map(|i| i.into()).collect(),
-            reward_amount: input.reward_amount.parse().unwrap(),
+            reward_amount: 0u32.into(),
             reward_token,
         }
     }

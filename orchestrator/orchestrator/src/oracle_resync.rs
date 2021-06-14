@@ -23,6 +23,8 @@ pub async fn get_last_checked_block(
     gravity_contract_address: Address,
     web3: &Web3,
 ) -> Uint256 {
+    info!("gravity contract address {}", gravity_contract_address);
+
     let mut grpc_client = grpc_client;
     const BLOCKS_TO_SEARCH: u128 = 5_000u128;
 
@@ -190,6 +192,7 @@ pub async fn get_last_checked_block(
         // because this only involves events within the searching block range.
         valset_events.reverse();
         for event in valset_events {
+            info!("In valset event....");
             match ValsetUpdatedEvent::from_log(&event) {
                 Ok(valset) => {
                     // if we've found this event it is the first possible event from the contract

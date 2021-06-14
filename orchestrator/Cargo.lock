@@ -888,8 +888,7 @@ dependencies = [
 [[package]]
 name = "deep_space"
 version = "2.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea6a81d9084ce357c7f6b07c2819f257846839fa76b209a3c89e9022c65be19b"
+source = "git+https://github.com/public-awesome/deep_space?branch=fix/query-for-tx#6282fcbb85a923eea8b1235a4bd9bd670bdc2e72"
 dependencies = [
  "base64",
  "bech32",
